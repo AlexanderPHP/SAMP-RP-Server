@@ -1,0 +1,7 @@
+plugins
+.git
+*.exe
+*.dll
+pawno/*.exe
+pawno/*.dll
+Backups
