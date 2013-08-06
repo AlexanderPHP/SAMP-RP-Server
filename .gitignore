@@ -5,3 +5,4 @@ plugins
 pawno/*.exe
 pawno/*.dll
 Backups
+gamemode/*.amx

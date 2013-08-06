@@ -731,7 +731,7 @@ public: OnPlayerRegisterRules(mysql_player)
 public: OnPlayerLoginGame(mysql_player, extraid, connectionHandle)
 {
 	static rows, fields;
-    cache_get_data(rows, fields);
+	cache_get_data(rows, fields);
 	if(rows)
 	{
 		static email[32];
