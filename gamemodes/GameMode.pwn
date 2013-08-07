@@ -13,25 +13,25 @@
 #include <YSI\y_hooks>	
 //#include <file>
 
-#include <GInc\Config>
+#include <Sources\Config>
 
 //==============================================================================
 
 
 //===========Transport==========
-#include <GInc\Transport\Speedo>
-#include <GInc\Transport\Command>
+#include <Sources\Transport\Speedo>
+#include <Sources\Transport\Command>
 	//=========Команды===========	
-#include <GInc\Commands\Commands>
-#include <GInc\Commands\Dialogs>
-#include <GInc\Commands\Functions>
+#include <Sources\Commands\Commands>
+#include <Sources\Commands\Dialogs>
+#include <Sources\Commands\Functions>
 //==========Other=========
-#include <GInc\PayDay>
-#include <GInc\Objects>
-#include <GInc\AutoShow>
-#include <GInc\Bank>
-#include <GInc\Costume>
-#include <GInc\Ammo>
+#include <Sources\PayDay>
+#include <Sources\Objects>
+#include <Sources\AutoShow>
+#include <Sources\Bank>
+#include <Sources\Costume>
+#include <Sources\Ammo>
 //====================Правила сервер============================================
 
 
