@@ -47,7 +47,7 @@ Hook:SPD_OnPlayerConnect(playerid)
 	TextDrawBackgroundColor(LightShow[playerid], COLOR_BLACK);//обводка текста
 	TextDrawLetterSize(LightShow[playerid],0.399999,1.010000);//размер текста
 	TextDrawFont(LightShow[playerid], 3);//стиль
-	TextDrawColor(LightShow[playerid], RED);//цвет текста
+	TextDrawColor(LightShow[playerid], COLOR_RED);//цвет текста
 	TextDrawSetOutline(LightShow[playerid], 1);//размер обводки
 	TextDrawSetProportional(LightShow[playerid],1);
 	TextDrawSetShadow(LightShow[playerid],1);//тень
@@ -57,7 +57,7 @@ Hook:SPD_OnPlayerConnect(playerid)
 	TextDrawBackgroundColor(StatusShow[playerid], COLOR_BLACK);//обводка текста
 	TextDrawLetterSize(StatusShow[playerid],0.399999,1.010000);//размер текста
 	TextDrawFont(StatusShow[playerid], 3);//стиль
-	TextDrawColor(StatusShow[playerid], GREEN);//цвет текста
+	TextDrawColor(StatusShow[playerid], COLOR_GREEN);//цвет текста
 	TextDrawSetOutline(StatusShow[playerid], 1);//размер обводки
 	TextDrawSetProportional(StatusShow[playerid],1);
 	TextDrawSetShadow(StatusShow[playerid],1);//тень
@@ -77,7 +77,7 @@ Hook:SPD_OnPlayerConnect(playerid)
 	TextDrawBackgroundColor(FuelShow[playerid], COLOR_BLACK);//обводка текста
 	TextDrawLetterSize(FuelShow[playerid],0.399999,1.010000);//размер текста
 	TextDrawFont(FuelShow[playerid], 3);//стиль
-	TextDrawColor(FuelShow[playerid], RED);//цвет текста
+	TextDrawColor(FuelShow[playerid], COLOR_RED);//цвет текста
 	TextDrawSetOutline(FuelShow[playerid], 1);//размер обводки
 	TextDrawSetProportional(FuelShow[playerid],1);
 	TextDrawSetShadow(FuelShow[playerid],1);//тень

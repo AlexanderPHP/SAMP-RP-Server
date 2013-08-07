@@ -1,6 +1,6 @@
 //#include <Transport\Benzine>
 
-YCMD:setstat(playerid, params[], help)
+CMD:setstat(playerid, params[])
 {
 	if(IsPlayerAdmin(playerid) == 0) return true;
 	if(sscanf(params, "uii", params[0], params[1], params[2]))
@@ -16,27 +16,27 @@ YCMD:setstat(playerid, params[], help)
 			case 1: SetPVarInt(params[0], "Sex", params[2]);
 			case 2: { oGiveMoney(params[0], params[2]); }
   			case 3: SetPVarInt(params[0], "Kills", params[2]);
-     		case 4: SetPVarInt(params[0], "Deaths", params[2]);
-       		case 5: { oSetSkin(params[0], params[2]); }
+	     		case 4: SetPVarInt(params[0], "Deaths", params[2]);
+       			case 5: { oSetSkin(params[0], params[2]); }
 		}
 	}
 	return true;
 }
 
-YCMD:stats(playerid, params[], help) return Stats(playerid);
+CMD:stats(playerid, params[]) return Stats(playerid);
 
-YCMD:mhelp(playerid, params[], help)
+CMD:mhelp(playerid, params[])
 {
  SendClientMessageToAll(COLOR_RED, "Епта, работает!");
  return true;
 }
 
-YCMD:ban(playerid, params[], help)
+CMD:ban(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 3) return true;
-	if(sscanf(params, "uds[50]", params[0], params[1], params[2])) return SendMes(playerid, COLOR_TEST, "Введи: /ban [ид игрока/часть ника] [кол-во дней(2-90)] [причина]");
+	if(sscanf(params, "uds[50]", params[0], params[1], params[2])) return SendMes(playerid, COLOR_GREY, "Введи: /ban [ид игрока/часть ника] [кол-во дней(2-90)] [причина]");
 	if(GetPVarInt(params[0], "IsLogged") == 0) return MSG_NoneOnlinePlayer(playerid);
-	if(params[1] > 90 || params[1] < 2) return SendMes(playerid, COLOR_TEST, "* Минимальное количество дней бана 2, максимальное 90.");
+	if(params[1] > 90 || params[1] < 2) return SendMes(playerid, COLOR_GREY, "* Минимальное количество дней бана 2, максимальное 90.");
  	if(params[0] == playerid) return MSG_MyID(playerid);
  	static data[16], \
 			str[130], query_mysql[200];
@@ -47,10 +47,10 @@ YCMD:ban(playerid, params[], help)
 	return true;
 }
 
-YCMD:kick(playerid, params[], help)
+CMD:kick(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 2) return true;
-	if(sscanf(params, "us[50]", params[0], params[1], params[2])) return SendMes(playerid, COLOR_TEST, "Введи: /kick [ид игрока/часть ника] [причина]");
+	if(sscanf(params, "us[50]", params[0], params[1], params[2])) return SendMes(playerid, COLOR_GREY, "Введи: /kick [ид игрока/часть ника] [причина]");
 	if(GetPVarInt(params[0], "IsLogged") == 0) return MSG_NoneOnlinePlayer(playerid);
  	if(params[0] == playerid) return MSG_MyID(playerid);
  	static str[130];
@@ -59,10 +59,10 @@ YCMD:kick(playerid, params[], help)
 	return true;
 }
 
-YCMD:skick(playerid, params[], help)
+CMD:skick(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 4) return true;
-	if(sscanf(params, "u", params[0], params[1], params[2])) return SendMes(playerid, COLOR_TEST, "Введи: /skick [ид игрока/часть ника]");
+	if(sscanf(params, "u", params[0], params[1], params[2])) return SendMes(playerid, COLOR_GREY, "Введи: /skick [ид игрока/часть ника]");
 	if(GetPVarInt(params[0], "IsLogged") == 0) return MSG_NoneOnlinePlayer(playerid);
  	if(params[0] == playerid) return MSG_MyID(playerid);
 	SendMes(playerid, COLOR_YELLOW, "Вы кикнули скрыто игрока: %d", PlayerName(playerid));
@@ -70,7 +70,7 @@ YCMD:skick(playerid, params[], help)
 	return true;
 }
 
-YCMD:unban(playerid, params[], help)
+CMD:unban(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 3) return true;
 	if(sscanf(params, "s[24]", params[0])) return SendMes(playerid, COLOR_WHITE, "Введи: /unban [полный ник игрока]");
@@ -79,7 +79,7 @@ YCMD:unban(playerid, params[], help)
 	return true;
 }
 
-YCMD:admins(playerid, params[], help)
+CMD:admins(playerid, params[])
 {
     if(GetPVarInt(playerid, "Admin") < 1) return true;
     new str_one[1000], str[300];
@@ -96,7 +96,7 @@ YCMD:admins(playerid, params[], help)
 	return true;
 }
 
-YCMD:goto(playerid, params[], help)
+CMD:goto(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 2) return true;
 	if(sscanf(params, "u", params[0])) return SendMes(playerid, COLOR_WHITE, "Введите: /goto [id игрока]");
@@ -109,7 +109,7 @@ YCMD:goto(playerid, params[], help)
 	return true;
 }
 
-YCMD:gethere(playerid, params[], help)
+CMD:gethere(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 3) return true;
 	if(sscanf(params, "u", params[0])) return SendMes(playerid, COLOR_WHITE, "Введите: /gethere [id игрока]");
@@ -122,7 +122,7 @@ YCMD:gethere(playerid, params[], help)
 	return true;
 }
 
-YCMD:gotocar(playerid, params[], help)
+CMD:gotocar(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 2) return true;
 	if(sscanf(params, "d", params[0])) return SendMes(playerid, COLOR_WHITE, "Введите: /gotocar [id car]");
@@ -133,7 +133,7 @@ YCMD:gotocar(playerid, params[], help)
 	return true;
 }
 
-YCMD:atm(playerid, params[], help)
+CMD:atm(playerid, params[])
 {
 	if(IsABankomat(playerid))
 	{
@@ -143,14 +143,14 @@ YCMD:atm(playerid, params[], help)
 	return true;
 }
 
-YCMD:veh(playerid, params[], help)
+CMD:veh(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 2) return true;
-	if(GetPVarInt(playerid,"CARUP") > 0) return SendMes(playerid, COLOR_TEST,"Необходимо удалить прошлый транспорт! Удалить '/vehd' ");
+	if(GetPVarInt(playerid,"CARUP") > 0) return SendMes(playerid, COLOR_GREY,"Необходимо удалить прошлый транспорт! Удалить '/vehd' ");
 	if(sscanf(params, "ddd", params[0],params[1],params[2])) return SendMes(playerid, COLOR_WHITE, "Введите: /veh [id машины] [цвет 1] [цвет 2]");
-	if(params[0] > 611 || params[0] < 400) return SendMes(playerid, COLOR_TEST, "ID транспорта от 400 до 611!");
-	if(params[1] > 126 || params[1] < 0) return SendMes(playerid, COLOR_TEST, "ID цвета от 0 до 126!");
-	if(params[2] > 126 || params[2] < 0) return SendMes(playerid, COLOR_TEST, "ID цвета от 0 до 126!");
+	if(params[0] > 611 || params[0] < 400) return SendMes(playerid, COLOR_GREY, "ID транспорта от 400 до 611!");
+	if(params[1] > 126 || params[1] < 0) return SendMes(playerid, COLOR_GREY, "ID цвета от 0 до 126!");
+	if(params[2] > 126 || params[2] < 0) return SendMes(playerid, COLOR_GREY, "ID цвета от 0 до 126!");
 	static Float:xyz[3];
 	GetPlayerPos(playerid, xyz[0], xyz[1], xyz[2]), SetPVarInt(playerid, "AddColor1", params[1]), SetPVarInt(playerid, "AddColor2", params[2]);
 	new carid = CreateVehicle(params[0], xyz[0], xyz[1], xyz[2], 0.0, params[1], params[2], 60000);
@@ -164,7 +164,7 @@ YCMD:veh(playerid, params[], help)
 	return true;
 }
 
-YCMD:time(playerid, params[], help)
+CMD:time(playerid, params[])
 {
 	new string[256];
 	new sendername[MAX_PLAYER_NAME];
@@ -228,7 +228,7 @@ YCMD:time(playerid, params[], help)
 	return true;
 }
 		
-YCMD:mm(playerid, params[], help)
+CMD:mm(playerid, params[])
 {
 	if(GetPVarInt(playerid, "IsLogged") == 1)
 	{
@@ -238,7 +238,7 @@ YCMD:mm(playerid, params[], help)
 	return true;
 }
 
-YCMD:me(playerid, params[], help)
+CMD:me(playerid, params[])
 {
 	new sendername[MAX_PLAYER_NAME];
 	new string[48];
@@ -252,7 +252,7 @@ YCMD:me(playerid, params[], help)
 	return true;
 }
 
-YCMD:sms(playerid, params[], help)
+CMD:sms(playerid, params[])
 {
 	new sendername[MAX_PLAYER_NAME];
 	new givename[MAX_PLAYER_NAME];
@@ -296,7 +296,7 @@ YCMD:sms(playerid, params[], help)
 	return true;
 }
 
-YCMD:myskill(playerid, params[], help)
+CMD:myskill(playerid, params[])
 {
 	new stringskill[700];
 	new points[6],percent[2] = "%";
@@ -317,16 +317,16 @@ YCMD:myskill(playerid, params[], help)
 	return 1;
 }
 
-YCMD:vehd(playerid, params[], help)
+CMD:vehd(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 2) return true;
-	if(!GetPVarInt(playerid,"CARUP")) return SendMes(playerid, COLOR_TEST,"Необходимо создать транспорт!");
+	if(!GetPVarInt(playerid,"CARUP")) return SendMes(playerid, COLOR_GREY,"Необходимо создать транспорт!");
 	SendMes(playerid, COLOR_WHITE, "Транспорт удален. ID: %d", GetPVarInt(playerid,"CARUP"));
 	DestroyVehicle(GetPVarInt(playerid,"CARUP")), DeletePVar(playerid,"CARUP");
 	return true;
 }
 
-YCMD:makeadmin(playerid, params[], help)
+CMD:makeadmin(playerid, params[])
 {
     if(!IsPlayerAdmin(playerid)) return true;
     if(sscanf(params, "d", params[0])) return SendMes(playerid, COLOR_WHITE, "Введите: /makeadmin [id]");
@@ -341,7 +341,7 @@ YCMD:makeadmin(playerid, params[], help)
 }
 
 
-YCMD:giveadmin(playerid, params[], help)
+CMD:giveadmin(playerid, params[])
 {
     if(!IsPlayerAdmin(playerid)) return true;
     if(sscanf(params, "ds[7]", params[0], params[1])) return SendMes(playerid, COLOR_WHITE, "Введите: /giveadmin [id] [+/-/remove]");
@@ -350,7 +350,7 @@ YCMD:giveadmin(playerid, params[], help)
     static query_mysql[80];
 	if(strcmp(params[1], "+", true) == 0)
  	{
- 	    if(GetPVarInt(params[0], "Admin") >= 5) return SendMes(playerid, COLOR_TEST, "У администратора: %s | Adm Level: %d | В повышении отказано !", PlayerName(params[0]), GetPVarInt(params[0], "Admin"));
+ 	    if(GetPVarInt(params[0], "Admin") >= 5) return SendMes(playerid, COLOR_GREY, "У администратора: %s | Adm Level: %d | В повышении отказано !", PlayerName(params[0]), GetPVarInt(params[0], "Admin"));
  	    SendMes(playerid, COLOR_YELLOW, "Вы повышели администратора: {FF0000}%s", PlayerName(params[0]));
   		SendMes(params[0], COLOR_YELLOW, "Вы повишены администратором: {FF0000}%s", PlayerName(playerid));
   		GivePVarInt(params[0], "Admin", 1), SendMes(params[0], COLOR_YELLOW, "Теперь у вас адм-лвл: {FF0000}%d", GetPVarInt(params[0], "Admin"));
@@ -358,7 +358,7 @@ YCMD:giveadmin(playerid, params[], help)
 	}
     if(strcmp(params[1], "-", true) == 0)
     {
-        if(GetPVarInt(params[0], "Admin") <= 1) return SendMes(playerid, COLOR_TEST, "У администратора: %s | Adm Level: %d | В понижении отказано !", PlayerName(params[0]), GetPVarInt(params[0], "Admin"));
+        if(GetPVarInt(params[0], "Admin") <= 1) return SendMes(playerid, COLOR_GREY, "У администратора: %s | Adm Level: %d | В понижении отказано !", PlayerName(params[0]), GetPVarInt(params[0], "Admin"));
     	SendMes(playerid, COLOR_YELLOW, "Вы понизили администратора: {FF0000}%s", PlayerName(params[0]));
   		SendMes(params[0], COLOR_YELLOW, "Вас понизил администратор: {FF0000}%s", PlayerName(playerid));
   		GivePVarInt(params[0], "Admin", -1), SendMes(params[0], COLOR_YELLOW, "Теперь у вас адм-лвл: {FF0000}%d", GetPVarInt(params[0], "Admin"));
@@ -374,7 +374,7 @@ YCMD:giveadmin(playerid, params[], help)
 	return true;
 }
 
-YCMD:info(playerid, params[], help)
+CMD:info(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") < 2) return true;
 	static name[24], other[5];
@@ -387,7 +387,7 @@ YCMD:info(playerid, params[], help)
 	return true;
 }
 
-YCMD:house(playerid, params[], help)
+CMD:house(playerid, params[])
 {
     if(GetPVarInt(playerid, "IsLogged") == 0) return true;
     if(GetPVarInt(playerid, "Admin") < 3) return true;
@@ -415,9 +415,9 @@ YCMD:house(playerid, params[], help)
 	SaveHouse();
 	return true;
 }
-YCMD:buyhouse(playerid, params[], help)
+CMD:buyhouse(playerid, params[])
 {
-    if(GetPVarInt(playerid, "HouseKey") >= 0) return SendMes(playerid, COLOR_TEST, "У вас уже есть дом !");
+    if(GetPVarInt(playerid, "HouseKey") >= 0) return SendMes(playerid, COLOR_GREY, "У вас уже есть дом !");
 	for_c(GetGVarInt("HouseM")-1, -1, idx)
 	{
 	    if(IsPlayerInRangeOfPoint(playerid, 5.0, HouseInfo[idx][hEnterX], HouseInfo[idx][hEnterY], HouseInfo[idx][hEnterZ]) && GetPlayerVirtualWorld(playerid) == 0)
@@ -433,9 +433,9 @@ YCMD:buyhouse(playerid, params[], help)
 	return true;
 }
 
-YCMD:open(playerid, params[], help)
+CMD:open(playerid, params[])
 {
-	if(GetPVarInt(playerid, "HouseKey") == -1) return SendMes(playerid, COLOR_GREEN, "У вас нету дома !");
+	if(GetPVarInt(playerid, "HouseKey") == -1) return SendMes(playerid, COLOR_GREEN, "У вас нет дома !");
 	new housee = GetPVarInt(playerid, "HouseKey");
 	switch(HouseInfo[housee][hLock])
 	{
@@ -445,7 +445,7 @@ YCMD:open(playerid, params[], help)
 	return true;
 }
 
-YCMD:exit(playerid, params[], help)
+CMD:exit(playerid, params[])
 {
 	for_c(GetGVarInt("HouseM")-1, -1, i)
 	{
@@ -458,22 +458,22 @@ YCMD:exit(playerid, params[], help)
 	return true;
 }
 
-YCMD:sellhome(playerid, params[], help)
+CMD:sellhome(playerid, params[])
 {
-	if(GetPVarInt(playerid, "HouseKey") == -1) return SendMes(playerid, COLOR_TEST, "У вас нету дома !");
+	if(GetPVarInt(playerid, "HouseKey") == -1) return SendMes(playerid, COLOR_GREY, "У вас нету дома !");
     static str[80];
     f(str,"{FFFFFF}Вы хотите продать дом за: {FF0000}%d$", HouseInfo[GetPVarInt(playerid, "HouseKey")][hPrice]/2);
     ShowPlayerDialog(playerid, D_DIALOGS+4, 0, "Продажа дома !",str,"Да","Выход");
 	return true;
 }
 
-YCMD:addhouse(playerid, params[], help)
+CMD:addhouse(playerid, params[])
 {
 	if(GetPVarInt(playerid, "Admin") <= 4) return true;
-    static paramsFo;
+	static paramsFo;
 	if(sscanf(params, "dd", paramsFo, params[1])) return SendMes(playerid, COLOR_AQUA, "Введи: /addhouse [1-%d] [цена]", GetGVarInt("Inter"));
-	if(paramsFo < 1 || paramsFo > GetGVarInt("Inter")) return SendMes(playerid, COLOR_TEST, "Неверный интерьер | 1-%d |", GetGVarInt("Inter"));
-	if(GetPlayerVirtualWorld(playerid) > 0 || GetPlayerInterior(playerid) > 0) return SendMes(playerid, COLOR_TEST, "Вы в другом виртуальном мире или в интерьере ! Inter: %d, VirtualWorld: %d", GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid));
+	if(paramsFo < 1 || paramsFo > GetGVarInt("Inter")) return SendMes(playerid, COLOR_GREY, "Неверный интерьер | 1-%d |", GetGVarInt("Inter"));
+	if(GetPlayerVirtualWorld(playerid) > 0 || GetPlayerInterior(playerid) > 0) return SendMes(playerid, COLOR_GREY, "Вы в другом виртуальном мире или в интерьере ! Inter: %d, VirtualWorld: %d", GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid));
 	GiveGVarInt("HouseM", 1, 0);
 	static Float:PosEnter[4],
 			query_mysql[350],
@@ -499,7 +499,7 @@ YCMD:addhouse(playerid, params[], help)
 	return true;
 }
 
-YCMD:inter(playerid, params[], help)
+CMD:inter(playerid, params[])
 {
     if(GetPVarInt(playerid, "Admin") < 1) return true;
     new str_one[1200];
@@ -514,9 +514,9 @@ YCMD:inter(playerid, params[], help)
 	return true;
 }
 
-YCMD:setspawn(playerid, params[], help) return ShowPlayerDialog(playerid,D_DIALOGS+6,DIALOG_STYLE_LIST,"{FF0000}Смена места спавна..","{FFFFFF}Респа\n{FFFF00}Дом","Выбрать","Отмена");
+CMD:setspawn(playerid, params[]) return ShowPlayerDialog(playerid,D_DIALOGS+6,DIALOG_STYLE_LIST,"{FF0000}Смена места спавна..","{FFFFFF}Респа\n{FFFF00}Дом","Выбрать","Отмена");
 
-YCMD:v(playerid, params[], help)
+CMD:v(playerid, params[])
 {
 	new carid,color1,color2,Float:Pos[4];
 	if(sscanf(params, "ddd", carid,color1,color2)) return SendMes(playerid, COLOR_RED, "Введи: /spawnveh [400 < carid < 611] [Color-1] [Color-2]");
@@ -535,7 +535,7 @@ YCMD:v(playerid, params[], help)
 }
  
  
-YCMD:test(playerid,params[],help)
+CMD:test(playerid,params[],help)
 {
 	new
 	Float:fPX, Float:fPY, Float:fPZ,
@@ -554,7 +554,7 @@ YCMD:test(playerid,params[],help)
  	return SendMes(playerid,COLOR_RED,str);
 }
 
-/*YCMD:setpos(playerid,params[],help)
+/*CMD:setpos(playerid,params[],help)
 {
 //new Float:p[4];
 //GetPlayerPos(playerid,p[0],p[1],p[2]);
@@ -567,14 +567,14 @@ return true;
 
 }
 
-YCMD:setpos1(playerid,params[],help)
+CMD:setpos1(playerid,params[],help)
 {
 	
 	SetPlayerCameraLookAt(playerid,-1664.379150, 1207.728759, 23.454399,2);
 	return true;
 }
 
-YCMD:setpos2(playerid,params[],help)
+CMD:setpos2(playerid,params[],help)
 {
 	//SetPlayerCameraPos(playerid, -1664.379150, 1207.728759, 23.454399);
 	SetPlayerCameraLookAt(playerid,-1664.379150 + 1*floatsin(60,degrees),1207.728759 + 2*floatcos(60,degrees),23.454399);
@@ -582,7 +582,7 @@ YCMD:setpos2(playerid,params[],help)
 	return true;
 	
 }*/
-YCMD:setp(playerid,params[],help)
+CMD:setp(playerid,params[],help)
 {
 //	SetPlayerPos(playerid, -1657.2484, 1211.0175, 7.2500);
 	SetPlayerPos(playerid, -1967.2998,293.7426,35.2000);
@@ -590,7 +590,7 @@ YCMD:setp(playerid,params[],help)
 	
 }
 
-YCMD:setposr(playerid,params[],help)
+CMD:setposr(playerid,params[],help)
 {
 	SetCameraBehindPlayer(playerid);
 	SetPlayerVirtualWorld(playerid,0);
@@ -598,9 +598,10 @@ YCMD:setposr(playerid,params[],help)
 	return true;
 }
 
-YCMD:goauto(playerid,params[],help)
+CMD:goauto(playerid,params[],help)
 {
 	SetPlayerPos(playerid, -1656.9027,1211.2896,7.2500);
 	return true;
 }
 
+//CMD:

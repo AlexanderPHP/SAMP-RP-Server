@@ -6,3 +6,5 @@ pawno/*.exe
 pawno/*.dll
 Backups
 gamemode/*.amx
+GIT.bat
+GIT.lnk

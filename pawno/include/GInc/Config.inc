@@ -37,29 +37,20 @@
 #define Ammo_MP5 75 //Кол - во, которые надо выстрелить, чтоы прокачать 1 процент
 #define Ammo_AK47 100 //Кол - во, которые надо выстрелить, чтоы прокачать 1 процент
 #define Ammo_M4A1 89 //Кол - во, которые надо выстрелить, чтоы прокачать 1 процент  
-//Цвета
-#define COLOR_WHITE 	 									0xFFFFFFAA
-#define GREEN 												0x00FF00FF
-#define RED 												0xFF0000FF
-#define COLOR_YELLOW 	 									0xFFFF00AA
-#define COLOR_GREEN      									0x00FF00AA
-#define COLOR_RED 	 										0xFF0000AA
-#define COLOR_TEST       									0xAFAFAFAA
-#define COLOR_AQUA	 										0x7FC0E3FF
 //Другое
 #define for_c(%0,%1,%2)   									for(new %2 = %0; %2 != %1; --%2)
 #define SellHome(%0)    									f(%0,"{0000FF}Дом продается..{FFFFFF}\n\nАдрес: {7CFC00}%s-{FF0000}%d{FFFFFF}\nЦена: {7CFC00}$%d{FFFFFF}", HouseInfo[idx][hNameStreet], idx, HouseInfo[idx][hPrice])
-#define MAX_INTER                                           36
-#define MAX_HOUSE 											50 // Максимальное кол-во домов.
-#define MAX_PLAYERS                     					(50) // !> Максимальное кол-во игроков.
-#assert MAX_PLAYERS                							>(0)
-#define BYTES_PER_CELL 	 									(cellbits / 8)
+#define MAX_INTER                                      						 	36
+#define MAX_HOUSE 									50 // Максимальное кол-во домов.
+#define MAX_PLAYERS                     								(50) // !> Максимальное кол-во игроков.
+#assert MAX_PLAYERS                								>(0)
+#define BYTES_PER_CELL 	 								(cellbits / 8)
 #define public:%0(%1)     									forward %0(%1); public %0(%1)
 #define GivePVarInt(%1,%2,%3) 								SetPVarInt(%1,%2,GetPVarInt(%1,%2) + %3)
 #define GiveGVarInt(%0,%1,%2) 								SetGVarInt(%0,(GetGVarInt(%0, %2) + %1),%2)
-#define f(%1, 		 										format(%1,sizeof(%1),
+#define f(%1, 		 									format(%1,sizeof(%1),
 #define MSG_MyID(%0)                                        SendMes(%0, 0xF97804FF, "Вы указали свой ID")
-#define MSG_NoneOnlinePlayer(%0)                            SendMes(%0, COLOR_TEST, "Такого игрока нет или он еще не вошел !")
+#define MSG_NoneOnlinePlayer(%0)                            SendMes(%0, COLOR_GREY, "Такого игрока нет или он еще не вошел !")
 #define oSetMoney(%1,%2) 									SetPVarInt(%1, "Money", %2), ResetPlayerMoney(%1); GivePlayerMoney(%1, %2)
 #define oGiveMoney(%1,%2)                                   GivePVarInt(%1, "Money", %2); GivePlayerMoney(%1, %2)
 #define oSetSkin(%1,%2)                                     SetPVarInt(%1, "Skin", %2), GetPlayerSkin(%1); SetPlayerSkin(%1, %2)
@@ -71,10 +62,13 @@
 #define MySQL_DEBUG             							1
 #define MySQL_HOST              							"localhost" // Ip где расположена phpMyAdmin
 #define MySQL_USER              							"root" // Login
-#define MySQL_DATABASE  									"test" // Название таблицы
+#define MySQL_DATABASE  							"test" // Название таблицы
 #define MySQL_PASS              							"" // Пароль
 #define mysql_player                                     	playerid, query[]
 // ====== Цвета ======
+#define COLOR_GREEN      									0x00FF00AA
+#define COLOR_RED 	 								0xFF0000AA
+#define COLOR_AQUA	 								0x7FC0E3FF
 #define COLOR_BOX 0x00000050
 #define COLOR_BBLUE 0x20A9FFFF
 #define COLOR_ISPOLZUY 0x7FB151FF
@@ -106,7 +100,6 @@
 #define COLOR_YELLOW 0xFFFF00AA
 #define COLOR_YELLOW2 0xF5DEB3AA
 #define COLOR_WHITE 0xFFFFFFAA
-#define COLOR_REDD 0xFF0000AA
 #define COLOR_BROW 0xA85400AA
 #define COLOR_FADE1 0xE6E6E6E6
 #define COLOR_FADE2 0xC8C8C8C8

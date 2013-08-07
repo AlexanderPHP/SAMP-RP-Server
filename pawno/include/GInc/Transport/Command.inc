@@ -1,11 +1,11 @@
-YCMD:en(playerid, params[], help)
+CMD:en(playerid, params[])
 {
 	new carid = GetPlayerVehicleID(playerid);
 	if(starting[playerid] == 0)
 	{
 		if(GetVehicleModel(carid) != 462)
 		{
-			if (FuelVeh[carid] <= 0) return SendClientMessage(playerid, COLOR_REDD, "Вызовите механика или заправьтесь с конистры!");
+			if (FuelVeh[carid] <= 0) return SendClientMessage(playerid, COLOR_RED, "Вызовите механика или заправьтесь с конистры!");
 		}
 		if(GetPlayerVehicleID(playerid) != INVALID_VEHICLE_ID)
 		{
@@ -31,7 +31,7 @@ YCMD:en(playerid, params[], help)
 	}
 	return true;
 }
-YCMD:light(playerid, params[], help)
+CMD:light(playerid, params[])
 {
 	if(light_car[playerid] == 0)
 	{
@@ -62,7 +62,7 @@ YCMD:light(playerid, params[], help)
 	return true;
 }
 
-YCMD:afill(playerid,params[],help)
+CMD:afill(playerid,params[],help)
 {
 	if(GetPVarInt(playerid, "Admin") < 3) return true;
 	new carid = GetPlayerVehicleID(playerid);

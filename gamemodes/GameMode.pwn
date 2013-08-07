@@ -9,7 +9,7 @@
 #include <streamer>
 #include <mxINI>
 #include <3DMenu>
-#include <YSI\y_commands>
+#include <zcmd>
 #include <YSI\y_hooks>	
 //#include <file>
 
@@ -20,7 +20,6 @@
 
 //===========Transport==========
 #include <GInc\Transport\Speedo>
-#include <GInc\Transport\Benzine>
 #include <GInc\Transport\Command>
 	//=========Команды===========	
 #include <GInc\Commands\Commands>
@@ -538,7 +537,7 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 	{
 	    if(IsPlayerInAnyVehicle(playerid)) return SendMes(playerid,0xFF0000AA,"Вы в транспорте");
 		SetPlayerPosFindZ(playerid, fX, fY, fZ);
-		SendMes(playerid, COLOR_TEST, "Вы были телепортированы");
+		SendMes(playerid, COLOR_GREY, "Вы были телепортированы");
 		SetPlayerInterior(playerid, 0), SetPlayerVirtualWorld(playerid, 0);
 		return true;
 	}
