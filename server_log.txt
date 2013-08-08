@@ -8717,3 +8717,115 @@ v0.3x, (C)2005-2013 SA-MP Team
 [21:23:05] 
 Подключено к базе данных: Успешно
 [21:23:05] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3x, (C)2005-2013 SA-MP Team
+
+[19:03:00] filterscripts = ""  (string)
+[19:03:00] 
+[19:03:00] Server Plugins
+[19:03:00] --------------
+[19:03:00]  Loading plugin: sscanf
+[19:03:00] 
+
+[19:03:00]  ===============================
+
+[19:03:00]       sscanf plugin loaded.     
+
+[19:03:00]    (c) 2009 Alex "Y_Less" Cole
+
+[19:03:00]    0.3d-R2 500 Players "dnee"
+
+[19:03:00]  ===============================
+
+[19:03:00]   Loaded.
+[19:03:00]  Loading plugin: mysql
+[19:03:00] plugin.mysql: R15 successfully loaded.
+[19:03:00]   Loaded.
+[19:03:00]  Loading plugin: gvar
+[19:03:00] 
+
+*** GVar Plugin v1.3 by Incognito loaded ***
+
+[19:03:00]   Loaded.
+[19:03:00]  Loading plugin: streamer
+[19:03:00] 
+
+*** Streamer Plugin v2.6.1 by Incognito loaded ***
+
+[19:03:00]   Loaded.
+[19:03:00]  Loaded 4 plugins.
+
+[19:03:00] 
+[19:03:00] Filterscripts
+[19:03:00] ---------------
+[19:03:00]   Loaded 0 filterscripts.
+
+[19:03:00]  
+[19:03:00]  
+[19:03:00] ssssssssssssssssssssssssssssssswert
+
+[19:03:01] 
+Подключено к базе данных: Неуспешно
+[19:03:01] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3x, (C)2005-2013 SA-MP Team
+
+[19:03:40] filterscripts = ""  (string)
+[19:03:40] 
+[19:03:40] Server Plugins
+[19:03:40] --------------
+[19:03:40]  Loading plugin: sscanf
+[19:03:40] 
+
+[19:03:40]  ===============================
+
+[19:03:40]       sscanf plugin loaded.     
+
+[19:03:40]    (c) 2009 Alex "Y_Less" Cole
+
+[19:03:40]    0.3d-R2 500 Players "dnee"
+
+[19:03:40]  ===============================
+
+[19:03:40]   Loaded.
+[19:03:40]  Loading plugin: mysql
+[19:03:40] plugin.mysql: R15 successfully loaded.
+[19:03:40]   Loaded.
+[19:03:40]  Loading plugin: gvar
+[19:03:40] 
+
+*** GVar Plugin v1.3 by Incognito loaded ***
+
+[19:03:40]   Loaded.
+[19:03:40]  Loading plugin: streamer
+[19:03:40] 
+
+*** Streamer Plugin v2.6.1 by Incognito loaded ***
+
+[19:03:40]   Loaded.
+[19:03:40]  Loaded 4 plugins.
+
+[19:03:40] 
+[19:03:40] Filterscripts
+[19:03:40] ---------------
+[19:03:40]   Loaded 0 filterscripts.
+
+[19:03:40]  
+[19:03:40]  
+[19:03:40] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaassssssssssssssssssssssssssswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwssss
+
+[19:03:41] 
+Подключено к базе данных: Неуспешно
+[19:03:41] Number of vehicle models: 0

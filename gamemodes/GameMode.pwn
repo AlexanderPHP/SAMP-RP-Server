@@ -207,7 +207,7 @@ public OnPlayerSpawn(playerid)
  
 public OnPlayerRequestSpawn(playerid)
 {
-	if(GetPVarInt(playerid, "IsLogged") == 0)
+	if(GetGVarInt("IsLogged",playerid) == 0)
 	{
 		SendClientMessage(playerid, -1, "Авторизуйся зараза!");
 		return false;
@@ -241,23 +241,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	switch(dialogid)
 	{
-	    case Register:
-	    {
-	        if(!response) return SendMes(playerid, COLOR_RED, "Вы отказались от регистрации !"), fix_kick(playerid);
+		case Register:
+		{
+			if(!response) return SendMes(playerid, COLOR_RED, "Вы отказались от регистрации !"), fix_kick(playerid);
 			if(strlen(inputtext) == 0) return SendClientMessage(playerid, COLOR_WHITE, "Вы не ввели пароль."), RegisterDialog(playerid);
 			static query_mysql[160];
 			f(query_mysql, "INSERT INTO `"PTG"` (`Name`, `Password`, `IP`) VALUES ('%s', '%s', '%s')", PlayerName(playerid), inputtext, PlayerIP(playerid));
 			SendMes(playerid, COLOR_YELLOW, "Ваш пароль: {FF0000}%s {32CD32}", inputtext);
 			mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegister", "d", playerid);
 		}
-	    case Login:
-	    {
-	        if(!response) return SendMes(playerid, COLOR_RED, "Вы отказались от авторизации !"), fix_kick(playerid);
-	        for(new i = strlen(inputtext); i != 0; --i)
-			switch(inputtext[i])
+		case Login:
+		{
+			if(!response) return SendMes(playerid, COLOR_RED, "Вы отказались от авторизации !"), fix_kick(playerid);
+			for(new i = strlen(inputtext); i != 0; --i)
 			{
-			case 'А'..'Я', 'а'..'я', ' ':
-				return ShowPlayerDialog(playerid,D_DIALOGS+12,DIALOG_STYLE_MSGBOX,"{FF0000}Ошибка!","{FFFFFF}Смените раскладку клавиатуры с русского на английский","Ок","");
+				switch(inputtext[i])
+				{
+					case 'А'..'Я', 'а'..'я', ' ': return ShowPlayerDialog(playerid,D_DIALOGS+12,DIALOG_STYLE_MSGBOX,"{FF0000}Ошибка!","{FFFFFF}Смените раскладку клавиатуры с русского на английский","Ок","");
+				}
 			}
 			if(strlen(inputtext) == 0) return SendClientMessage(playerid, COLOR_WHITE, "Вы не ввели пароль."), LoginDialog(playerid);
 			static query_mysql[120];
@@ -265,91 +266,94 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
    		case D_DIALOGS+1:
 	 	{
-	 	    if(!response) return SendMes(playerid, COLOR_RED, "Вы отказались от ввода Email !"), fix_kick(playerid);
-            static query_mysql[120];
-       /*     print("1");
+		 	if(!response) 
+		 	{
+		 		return SendMes(playerid, COLOR_RED, "Вы отказались от ввода Email !"), fix_kick(playerid);
+		 	}
+			/*static query_mysql[120];
 			f(query_mysql, "SELECT * FROM `"PTG"` WHERE `Email` = '%s'", inputtext);
 			mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckEmail", "d", playerid);
-			print("2");
-			static per;per = GetPVarInt(playerid, "CheckEmail");
+			static per;per = GetGVarInt(, "CheckEmail");
 			printf("%d\nпер", per);
 			//SetPVarInt(playerid,"CheckEmail",0);
 			if(GetPVarInt(playerid, "CheckEmail") == 1)
-			{*/
-			//SpawnPlayer(playerid);
-			//new randphone = 10000 + random(899999);
-			//mysql_function_query(g_CH, query_mysqll, true, "OnPlayerCheckMobile", "d", playerid);
-			f(query_mysql, "UPDATE `"PTG"` SET `Email` = '%s' WHERE `name` = '%s'", inputtext, PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckMobile", "d", playerid);
-			//OnPlayerRegisterInvite
-			// mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegisterFinish", "d", playerid);
-		//	ShowPlayerDialog(playerid,D_DIALOGS+2,DIALOG_STYLE_LIST,"{FF0000}Выберите пол.","Мужчина\nЖенщина","Ок","Назад");
-			SendMes(playerid, COLOR_YELLOW, "Ваш email: {FF0000}%s", inputtext), SetPlayerVirtualWorld(playerid, playerid);
-		//	SetSpawnInfo(playerid, 255, playerid, 0, 0, 0, 1.0, -1, -1, -1, -1, -1, -1), SpawnPlayer(playerid), DeletePVar(playerid, "CheckEmail");
-			return true;
-/*			}
+			{
+				//SpawnPlayer(playerid);
+				//new randphone = 10000 + random(899999);
+				//mysql_function_query(g_CH, query_mysqll, true, "OnPlayerCheckMobile", "d", playerid);
+				f(query_mysql, "UPDATE `"PTG"` SET `Email` = '%s' WHERE `name` = '%s'", inputtext, PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckMobile", "d", playerid);
+				//OnPlayerRegisterInvite
+				// mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegisterFinish", "d", playerid);
+			//	ShowPlayerDialog(playerid,D_DIALOGS+2,DIALOG_STYLE_LIST,"{FF0000}Выберите пол.","Мужчина\nЖенщина","Ок","Назад");
+				SendMes(playerid, COLOR_YELLOW, "Ваш email: {FF0000}%s", inputtext), SetPlayerVirtualWorld(playerid, playerid);
+			//	SetSpawnInfo(playerid, 255, playerid, 0, 0, 0, 1.0, -1, -1, -1, -1, -1, -1), SpawnPlayer(playerid), DeletePVar(playerid, "CheckEmail");
+				return true;
+			}
 			SendClientMessage(playerid, COLOR_GREEN, "Ошибка при вводе Email, попробуйте еще раз!");
-            ShowPlayerDialog(playerid,D_DIALOGS+1,DIALOG_STYLE_INPUT,"{FF0000}Email","{FFFFFF}Введите свой {00FF00}Email{FFFFFF} {FF0000}!","Ок","Назад");*/
+	  		ShowPlayerDialog(playerid,D_DIALOGS+1,DIALOG_STYLE_INPUT,"{FF0000}Email","{FFFFFF}Введите свой {00FF00}Email{FFFFFF} {FF0000}!","Ок","Назад");*/
 		}
 		case D_DIALOGS+2:
 	 	{
 			if(!response) return SendMes(playerid, COLOR_RED, "Вы отказались от выбора скина !"), fix_kick(playerid);
 			switch(listitem)
 			{
-   				case 0: SetPVarInt(playerid, "Sex", 0), SelectSkin(playerid);
-				case 1: SetPVarInt(playerid, "Sex", 1), SelectSkin(playerid);
+   				case 0: SetGVarInt("Sex", 0,playerid), SelectSkin(playerid);
+				case 1: SetGVarInt("Sex", 1,playerid), SelectSkin(playerid);
 			}
 		}
 		case D_DIALOGS+3:
 		{
-		    if(!response) return true;
-		    new idx = GetPVarInt(playerid, "PlayerHouse");
- 			if(!strcmp(HouseInfo[idx][hOwner],"None",true))
- 			{
-				if(GetPVarInt(playerid, "Money") < HouseInfo[idx][hPrice]) return SendMes(playerid, COLOR_RED, "У вас нету сколько денег для покупки, вам не хватает: {FFFFFF}%d{0000FF}$", HouseInfo[idx][hPrice]-GetPVarInt(playerid, "Money"));
+			if(!response) return true;
+			new idx = GetGVarInt("PlayerHouse",playerid);
+			if(!strcmp(HouseInfo[idx][hOwner],"None",true))
+			{
+				if(GetGVarInt("Money",playerid) < HouseInfo[idx][hPrice]) return SendMes(playerid, COLOR_RED, "У вас нету сколько денег для покупки, вам не хватает: {FFFFFF}%d{0000FF}$", HouseInfo[idx][hPrice]-GetGVarInt("Money", playerid));
 				oGiveMoney(playerid, -HouseInfo[idx][hPrice]);
 				GameTextForPlayer(playerid, "The house was bought", 3000, 5);
 				SendMes(playerid, COLOR_WHITE, "Вы купили дом за {FF0000}%d${FFFFFF} долларов. ", HouseInfo[idx][hPrice]);
 				HouseInfo[idx][hOwned] = 1, HouseInfo[idx][hLock] = 1;
-				SetPVarInt(playerid, "HouseKey", idx);
+				SetGVarInt("HouseKey", idx, playerid);
 				strmid(HouseInfo[idx][hOwner], PlayerName(playerid), 0, strlen(PlayerName(playerid)), MAX_PLAYER_NAME);
 				SetPlayerPos(playerid,HouseInfo[idx][hExitX],HouseInfo[idx][hExitY],HouseInfo[idx][hExitZ]);
 				SetPlayerInterior(playerid,HouseInfo[idx][hInt]);
 				HouseInfo[idx][hIcon] = CreateDynamicMapIcon(HouseInfo[idx][hEnterX], HouseInfo[idx][hEnterY], HouseInfo[idx][hEnterZ], 32, COLOR_WHITE, -1, -1, -1, 400.0);
-	 			DestroyPickup(HouseInfo[idx][hPickup]), HouseInfo[idx][hPickup] = CreatePickup(1272, 23, HouseInfo[idx][hEnterX], HouseInfo[idx][hEnterY], HouseInfo[idx][hEnterZ],-1);
+				DestroyPickup(HouseInfo[idx][hPickup]), HouseInfo[idx][hPickup] = CreatePickup(1272, 23, HouseInfo[idx][hEnterX], HouseInfo[idx][hEnterY], HouseInfo[idx][hEnterZ],-1);
 				SetPlayerVirtualWorld(playerid, HouseInfo[idx][hVirtualWorld]);
-				SaveHouse(), DeletePVar(playerid, "PlayerHouse"), Save_Player(playerid);
+				SaveHouse(), DeleteGVar("PlayerHouse", playerid), Save_Player(playerid);
 				return true;
 			}
 		}
 		case D_DIALOGS+4: // Продажа дома..
 	 	{
 			if(!response) return true;
-			new housee = GetPVarInt(playerid, "HouseKey");
-			SetPVarInt(playerid, "HouseKey", -1);
+			new housee = GetGVarInt("HouseKey", playerid);
+			SetGVarInt("HouseKey", -1, playerid);
 			oGiveMoney(playerid, HouseInfo[housee][hPrice]/2);
 			SendMes(playerid, COLOR_YELLOW, "Вы успешно продали дом за {FF0000}%d$", HouseInfo[housee][hPrice]/2);
 			strmid(HouseInfo[housee][hOwner], "None", 0, strlen("None"), MAX_PLAYER_NAME);
-            DestroyPickup(HouseInfo[housee][hPickup]), HouseInfo[housee][hPickup] = CreatePickup(1274, 23, HouseInfo[housee][hEnterX], HouseInfo[housee][hEnterY], HouseInfo[housee][hEnterZ],-1);
-      		HouseInfo[housee][hIcon] = CreateDynamicMapIcon(HouseInfo[housee][hEnterX], HouseInfo[housee][hEnterY], HouseInfo[housee][hEnterZ], 31, COLOR_WHITE, -1, -1, -1, 400.0);
+			DestroyPickup(HouseInfo[housee][hPickup]), HouseInfo[housee][hPickup] = CreatePickup(1274, 23, HouseInfo[housee][hEnterX], HouseInfo[housee][hEnterY], HouseInfo[housee][hEnterZ],-1);
+			HouseInfo[housee][hIcon] = CreateDynamicMapIcon(HouseInfo[housee][hEnterX], HouseInfo[housee][hEnterY], HouseInfo[housee][hEnterZ], 31, COLOR_WHITE, -1, -1, -1, 400.0);
 			HouseInfo[housee][hOwned] = 0, HouseInfo[housee][hLock] = 0;
-			SaveHouse(), SetPVarInt(playerid, "SetSpawn", 0), Save_Player(playerid);
+			SaveHouse();
+			SetGVarInt("SetSpawn", 0, playerid);
+			Save_Player(playerid);
 		}
 		case D_DIALOGS+5: // Открыть дом..
 	 	{
 			if(!response) return true;
-			new idx = GetPVarInt(playerid, "HouseKey");
+			new idx = GetGVarInt("HouseKey", playerid);
   			HouseInfo[idx][hLock] = 0, GameTextForPlayer(playerid, "~w~Door ~g~Unlocked", 5000, 6), PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
 		}
 		case D_DIALOGS+6:
 		{
-		    if(!response) return true;
+			if(!response) return true;
    			switch(listitem)
 			{
-				case 0: SetPVarInt(playerid, "SetSpawn", 0), SendMes(playerid, COLOR_YELLOW, "Вы установили место спавна {FFFFFF}'{FF0000}Респа{FFFFFF}'");
+				case 0: SetGVarInt("SetSpawn", 0, playerid), SendMes(playerid, COLOR_YELLOW, "Вы установили место спавна {FFFFFF}'{FF0000}Респа{FFFFFF}'");
 				case 1:
 				{
-					if(GetPVarInt(playerid, "HouseKey") == -1) return SendMes(playerid, COLOR_RED, "У вас нету дома !");
-					SetPVarInt(playerid, "SetSpawn", 1), SendMes(playerid, COLOR_YELLOW, "Вы установили место спавна в {FFFFFF}'{FF0000}Доме{FFFFFF}'");
+					if(GetGVarInt("HouseKey", playerid) == -1) return SendMes(playerid, COLOR_RED, "У вас нету дома !");
+					SetGVarInt("SetSpawn", 1, playerid), SendMes(playerid, COLOR_YELLOW, "Вы установили место спавна в {FFFFFF}'{FF0000}Доме{FFFFFF}'");
 				}
 			}
 		}
@@ -357,15 +361,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(response)
 			{
-			    new idx = GetPVarInt(playerid, "PickupIdxHouse");
+				new idx = GetGVarInt("PickupIdxHouse", playerid);
 				if(HouseInfo[idx][hLock] == 1)
 				{
-	    			if(strcmp(PlayerName(playerid), HouseInfo[idx][hOwner], true) == 0) ShowPlayerDialog(playerid, D_DIALOGS+5, 0, "{FF0000}Дом", "{FFFFFF}Ваш дом закрыт\n\nВы хотите его открыть?", "Да", "Нет");
+					if(strcmp(PlayerName(playerid), HouseInfo[idx][hOwner], true) == 0) ShowPlayerDialog(playerid, D_DIALOGS+5, 0, "{FF0000}Дом", "{FFFFFF}Ваш дом закрыт\n\nВы хотите его открыть?", "Да", "Нет");
 					SendMes(playerid, COLOR_RED, "Дом закрыт..");
 				}
 				else
 				{
-	    			SetPlayerPos(playerid,HouseInfo[idx][hExitX],HouseInfo[idx][hExitY],HouseInfo[idx][hExitZ]);
+					SetPlayerPos(playerid,HouseInfo[idx][hExitX],HouseInfo[idx][hExitY],HouseInfo[idx][hExitZ]);
 					SetPlayerInterior(playerid,HouseInfo[idx][hInt]), SetPlayerVirtualWorld(playerid,HouseInfo[idx][hVirtualWorld]);
 				}
 			}
@@ -379,13 +383,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case D_DIALOGS+9:
 	 	{
-            static query_mysql[120];
+			static query_mysql[120];
 			f(query_mysql, "UPDATE `"PTG"` SET `invite_nick` = '%s' WHERE `name` = '%s'", inputtext, PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegisterRules", "d", playerid);
 			return true;
 		}
-        case D_DIALOGS+10:
+    		case D_DIALOGS+10:
 	 	{
-	 	   if(response)
+			if(response)
 			{
 				new rulesdialogg[1000];
 				format(rulesdialogg,sizeof(rulesdialogg), "%s%s%s%s%s%s%s%s%s%s%s%s%s",
@@ -401,7 +405,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		case D_DIALOGS+11:
 	 	{
 			static query_mysql[120];
-	 	    f(query_mysql, "UPDATE `"PTG"` SET `Name` = '%s' WHERE `name` = '%s'", PlayerName(playerid), PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegisterFinish", "d", playerid);
+			f(query_mysql, "UPDATE `"PTG"` SET `Name` = '%s' WHERE `name` = '%s'", PlayerName(playerid), PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegisterFinish", "d", playerid);
 			ShowPlayerDialog(playerid,D_DIALOGS+2,DIALOG_STYLE_LIST,"{FF0000}Выберите пол.","Мужчина\nЖенщина","Ок","Назад");
 			SetSpawnInfo(playerid, 255, playerid, 0, 0, 0, 1.0, -1, -1, -1, -1, -1, -1), SpawnPlayer(playerid);
 			InterpolateCameraPos(playerid, 1673.023925, -2006.905151, 90.566871, 1682.506713, -1721.867797, 57.926670, 1000);
@@ -409,7 +413,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case D_DIALOGS+12:
 		{
-		    LoginDialog(playerid);
+			LoginDialog(playerid);
 		}
 	}
 	return true;
@@ -420,7 +424,7 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 /*	for_c(GetGVarInt("HouseM")-1, -1, idx)
 	{
     	if(pickupid == HouseInfo[idx][hPickup])
-    	{
+    	{ssssSsss
     	    SetPVarInt(playerid, "PickupIdxHouse", idx);
     	    static str[200];
 			if(HouseInfo[idx][hOwned] == 0) SellHome(str);
@@ -436,42 +440,45 @@ public OnPlayerPickUpPickup(playerid, pickupid)
 	return true;
 }
 
-public OnQueryError(errorid, error[], callback[], query[], connectionHandle) return WriteLog("/MySQL/Errors.txt", error), WriteLog("/MySQL/Errors.txt", callback), WriteLog("/MySQL/Errors.txt", query);
+public OnQueryError(errorid, error[], callback[], query[], connectionHandle)
+{
+	return WriteLog("/MySQL/Errors.txt", error), WriteLog("/MySQL/Errors.txt", callback), WriteLog("/MySQL/Errors.txt", query);
+}
 
 public OnPlayerSelectedMenuRow(playerid, row)
 {
-    new Menu:Current = GetPlayerMenu(playerid);
+	new Menu:Current = GetPlayerMenu(playerid);
 	if(Current == regskin)
 	{
-	    switch(row)
-	    {
-         	case 0:
-		    {
-				if(GetPVarInt(playerid, "Sex") == 0)// Мужик
+		switch(row)
+		{
+		    	case 0:
+			{
+				if(GetGVarInt("Sex", playerid) == 0)// Мужик
 				{
-				    if(GetPVarInt(playerid, "ChangeSkin") == 6) SetPVarInt(playerid, "ChangeSkin", 0);
-				    else GivePVarInt(playerid, "ChangeSkin", 1);
-				    SetPlayerInterior(playerid, 14), oSetSkin(playerid, SpawnInfo[0][fSkin][GetPVarInt(playerid, "ChangeSkin")]);
-                    ShowMenuForPlayer(regskin, playerid), SetPVarInt(playerid, "Skin", GetPlayerSkin(playerid));
+					if(GetGVarInt("ChangeSkin", playerid) == 6) SetGVarInt("ChangeSkin", 0, playerid);
+					else GiveGVarInt("ChangeSkin", 1, playerid);
+					SetPlayerInterior(playerid, 14), oSetSkin(playerid, SpawnInfo[0][fSkin][GetGVarInt("ChangeSkin", playerid)]);
+					ShowMenuForPlayer(regskin, playerid), SetGVarInt("Skin", GetPlayerSkin(playerid), playerid);
 				}
-				if(GetPVarInt(playerid, "Sex") == 1)// Девка
+				if(GetGVarInt("Sex", playerid) == 1)// Девка
 				{
-				    if(GetPVarInt(playerid, "ChangeSkin") == 6) SetPVarInt(playerid, "ChangeSkin", 0);
-				    else GivePVarInt(playerid, "ChangeSkin", 1);
-				    SetPlayerInterior(playerid, 14), oSetSkin(playerid, SpawnInfo[0][fSkinGirl][GetPVarInt(playerid, "ChangeSkin")]);
-                    ShowMenuForPlayer(regskin, playerid), SetPVarInt(playerid, "Skin", GetPlayerSkin(playerid));
+					if(GetGVarInt("ChangeSkin", playerid) == 6) SetGVarInt("ChangeSkin", 0, playerid);
+					else GiveGVarInt("ChangeSkin", 1, playerid);
+					SetPlayerInterior(playerid, 14), oSetSkin(playerid, SpawnInfo[0][fSkinGirl][GetGVarInt("ChangeSkin", playerid)]);
+					ShowMenuForPlayer(regskin, playerid), SetGVarInt("Skin", GetPlayerSkin(playerid), playerid);
 				}
 			}
 		 	case 1:
 			{	
-				SetPVarInt(playerid, "Skin", GetPlayerSkin(playerid));
-			    UnFreezePlayer(playerid), SetPlayerFacingAngle(playerid, 280), SetPlayerVirtualWorld(playerid, playerid);
+				SetGVarInt("Skin", GetPlayerSkin(playerid), playerid);
+				UnFreezePlayer(playerid), SetPlayerFacingAngle(playerid, 280), SetPlayerVirtualWorld(playerid, playerid);
 				SetCameraBehindPlayer(playerid), SetPlayerInterior(playerid, SpawnInfo[0][fInt]);
 				SetPlayerPos(playerid, SpawnInfo[0][fSpawnX], SpawnInfo[0][fSpawnY], SpawnInfo[0][fSpawnZ]);
-			    InterpolateCameraPos(playerid, 1673.023925, -2006.905151, 90.566871, 1682.506713, -1721.867797, 57.926670, 1000);
+				InterpolateCameraPos(playerid, 1673.023925, -2006.905151, 90.566871, 1682.506713, -1721.867797, 57.926670, 1000);
 				InterpolateCameraLookAt(playerid, 1676.034057, -2003.654541, 88.248970, 1680.283569, -1717.403076, 58.277946, 1000);
-    			static str[200];
-				f(str, "UPDATE `"PTG"` SET `Skin` = %d, `Sex` = %d WHERE `Name` = '%s'", GetPVarInt(playerid, "Skin"), GetPVarInt(playerid, "Sex"), PlayerName(playerid)); mysql_query(str, -1, -1, g_CH);
+				static str[150];
+				f(str, "UPDATE `"PTG"` SET `Skin` = %d, `Sex` = %d WHERE `Name` = '%s'", GetGVarInt("Skin", playerid), GetGVarInt("Sex", playerid), PlayerName(playerid)); mysql_query(str, -1, -1, g_CH);
 				LoginDialog(playerid);
 			}
 		}
@@ -533,7 +540,7 @@ public OnPlayerUpdate(playerid)
 
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
-	if(GetPVarInt(playerid, "Admin") >= 2)
+	if(GetGVarInt("Admin", playerid) >= 2)
 	{
 	    if(IsPlayerInAnyVehicle(playerid)) return SendMes(playerid,0xFF0000AA,"Вы в транспорте");
 		SetPlayerPosFindZ(playerid, fX, fY, fZ);
@@ -548,8 +555,8 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 public: OnPlayerCheckHouse(mysql_player)
 {
 	new rows, fields;
-    cache_get_data(rows, fields);
-	if(rows == 0) SetPVarInt(playerid, "HouseKey", -1), SetPVarInt(playerid, "SetSpawn", 0), Save_Player(playerid);
+   	cache_get_data(rows, fields);
+	if(rows == 0) SetGVarInt("HouseKey", -1, playerid), SetGVarInt("SetSpawn", 0, playerid), Save_Player(playerid);
 	return true;
 }
 
@@ -598,14 +605,14 @@ public: OnLoadHouse(mysql_player)
 			HouseInfo[he][hVirtualWorld] = cache_get_field_int(he, "VirtualWorld", g_CH);
 			Create3DTextLabel("Нажмите альт чтобы выйти..", COLOR_AQUA, HouseInfo[he][hExitX], HouseInfo[he][hExitY], HouseInfo[he][hExitZ], 10.0, HouseInfo[he][hVirtualWorld], 1);
 			if(HouseInfo[he][hOwned] == 0)
-        	{
-	            HouseInfo[he][hPickup] = CreatePickup(1274, 23, HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ],-1);
-	            HouseInfo[he][hIcon] = CreateDynamicMapIcon(HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ], 31, COLOR_WHITE, -1, -1, -1, 400.0);
+        			{
+				HouseInfo[he][hPickup] = CreatePickup(1274, 23, HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ],-1);
+				HouseInfo[he][hIcon] = CreateDynamicMapIcon(HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ], 31, COLOR_WHITE, -1, -1, -1, 400.0);
 			}
-	        else if(HouseInfo[he][hOwned] == 1)
-	        {
-            	HouseInfo[he][hIcon] = CreateDynamicMapIcon(HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ], 32, COLOR_WHITE, -1, -1, -1, 400.0);
-            	HouseInfo[he][hPickup] = CreatePickup(1272, 23, HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ],-1);
+			else if(HouseInfo[he][hOwned] == 1)
+			{
+				HouseInfo[he][hIcon] = CreateDynamicMapIcon(HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ], 32, COLOR_WHITE, -1, -1, -1, 400.0);
+				HouseInfo[he][hPickup] = CreatePickup(1272, 23, HouseInfo[he][hEnterX], HouseInfo[he][hEnterY], HouseInfo[he][hEnterZ],-1);
 			}
 			GiveGVarInt("HouseM", 1, 0);
 		}
@@ -616,11 +623,11 @@ public: OnLoadHouse(mysql_player)
 public: OnQueryAdminsInfo(mysql_player)
 {
 	static rows, fields;
-    cache_get_data(rows, fields);
+	cache_get_data(rows, fields);
 	if(rows)
 	{
-	    SetPVarInt(playerid, "Admin", cache_get_field_int(0, "AdmLevel", g_CH));
-	    SendMes(playerid, COLOR_YELLOW,"Вы вошли как администратор %d уровня", GetPVarInt(playerid, "Admin"));
+		SetGVarInt("Admin", cache_get_field_int(0, "AdmLevel", g_CH), playerid);
+		SendMes(playerid, COLOR_YELLOW,"Вы вошли как администратор %d уровня", GetGVarInt("Admin", playerid));
 	}
 	return true;
 }
@@ -638,12 +645,12 @@ public: OnPlayerCheckMobile(mysql_player)
 	static rows, fields;
 	new randphone = 10000 + random(899999);
 	static query_mysql[120];
-    cache_get_data(rows, fields);
-	if(GetPVarInt(playerid,"PhoneCheck") == 0)
+	cache_get_data(rows, fields);
+	if(GetGVarInt("PhoneCheck", playerid) == 0)
 	{
-		printf("PhoneCheck: %d", GetPVarInt(playerid,"PhoneCheck"));
-		SetPVarInt(playerid, "Phone", randphone);
-		SetPVarInt(playerid, "PhoneCheck", 1);
+		printf("PhoneCheck: %d", GetGVarInt("PhoneCheck", playerid));
+		SetGVarInt("Phone", randphone, playerid);
+		SetGVarInt("PhoneCheck", 1, playerid);
 		f(query_mysql, "SELECT * FROM `"PTG"` WHERE `phone` = '%d'", randphone);
 		mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckMobile", "d", playerid);
 	}
@@ -651,14 +658,14 @@ public: OnPlayerCheckMobile(mysql_player)
 	{
 		if(rows)
 		{
-			SetPVarInt(playerid, "Phone", randphone);
+			SetGVarInt("Phone", randphone, playerid);
 			f(query_mysql, "SELECT * FROM `"PTG"` WHERE `phone` = '%d'", randphone);
 			mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckMobile", "d", playerid);
 		}
 		else 
 		{
-			printf("Phone: %d",GetPVarInt(playerid, "Phone"));
-			f(query_mysql, "UPDATE `"PTG"` SET `phone` = '%d' WHERE `name` = '%s'", GetPVarInt(playerid, "Phone"), PlayerName(playerid));
+			printf("Phone: %d",GetGVarInt("Phone", playerid));
+			f(query_mysql, "UPDATE `"PTG"` SET `phone` = '%d' WHERE `name` = '%s'", GetGVarInt("Phone", playerid), PlayerName(playerid));
 			mysql_function_query(g_CH, query_mysql, true, "OnPlayerRegisterInvite", "d", playerid);
 		}
 	}	
@@ -697,8 +704,8 @@ public: OnLoadSpawn(mysql_player)
 			SpawnInfo[he][fInt] = cache_get_field_int(he, "Int", g_CH);
 			cache_get_field_content(he, "Color", SpawnInfo[he][fColor], g_CH, sizeof(temp));
 			cache_get_field_content(he, "Skins", temp, g_CH, sizeof(temp)), sscanf(temp, "p<,>ddddddddddd", skin[1], skin[2], skin[3], skin[4], skin[5], skin[6], skin[7], skin[8], skin[9], skin[10], skin[11]);
-            SpawnInfo[he][fSkin][0] = skin[1], SpawnInfo[he][fSkin][1] = skin[2], SpawnInfo[he][fSkin][2] = skin[3], SpawnInfo[he][fSkin][3] = skin[4], SpawnInfo[he][fSkin][4] = skin[5], SpawnInfo[he][fSkin][5] = skin[6], SpawnInfo[he][fSkin][6] = skin[7], SpawnInfo[he][fSkin][7] = skin[8], SpawnInfo[he][fSkin][8] = skin[9], SpawnInfo[he][fSkin][9] = skin[10], SpawnInfo[he][fSkin][10] = skin[11];
-            cache_get_field_content(he, "SkinsGirl", temp, g_CH, sizeof(temp)), sscanf(temp, "p<,>ddddddd", skingirl[0], skingirl[1], skingirl[2], skingirl[3], skingirl[4], skingirl[5], skingirl[6]);
+			SpawnInfo[he][fSkin][0] = skin[1], SpawnInfo[he][fSkin][1] = skin[2], SpawnInfo[he][fSkin][2] = skin[3], SpawnInfo[he][fSkin][3] = skin[4], SpawnInfo[he][fSkin][4] = skin[5], SpawnInfo[he][fSkin][5] = skin[6], SpawnInfo[he][fSkin][6] = skin[7], SpawnInfo[he][fSkin][7] = skin[8], SpawnInfo[he][fSkin][8] = skin[9], SpawnInfo[he][fSkin][9] = skin[10], SpawnInfo[he][fSkin][10] = skin[11];
+			cache_get_field_content(he, "SkinsGirl", temp, g_CH, sizeof(temp)), sscanf(temp, "p<,>ddddddd", skingirl[0], skingirl[1], skingirl[2], skingirl[3], skingirl[4], skingirl[5], skingirl[6]);
 			SpawnInfo[he][fSkinGirl][0] = skingirl[0], SpawnInfo[he][fSkinGirl][1] = skingirl[1], SpawnInfo[he][fSkinGirl][2] = skingirl[2], SpawnInfo[he][fSkinGirl][3] = skingirl[3], SpawnInfo[he][fSkinGirl][4] = skingirl[4], SpawnInfo[he][fSkinGirl][5] = skingirl[5], SpawnInfo[he][fSkinGirl][6] = skingirl[6];
 		}
 	}
@@ -707,12 +714,12 @@ public: OnLoadSpawn(mysql_player)
 
 public: OnPlayerCheck(mysql_player)
 {
-    InterpolateCameraPos(playerid, 1673.023925, -2006.905151, 90.566871, 1682.506713, -1721.867797, 57.926670, 1000);
+	InterpolateCameraPos(playerid, 1673.023925, -2006.905151, 90.566871, 1682.506713, -1721.867797, 57.926670, 1000);
 	InterpolateCameraLookAt(playerid, 1676.034057, -2003.654541, 88.248970, 1680.283569, -1717.403076, 58.277946, 1000);
 	static rows, fields;
-    cache_get_data(rows, fields);
-	if(!rows) SetPVarInt(playerid, "account_Exist", 0), RegisterDialog(playerid);
-	else SetPVarInt(playerid, "account_Exist", 1), LoginDialog(playerid);
+	cache_get_data(rows, fields);
+	if(!rows) SetGVarInt("account_Exist", 0, playerid), RegisterDialog(playerid);
+	else SetGVarInt("account_Exist", 1, playerid), LoginDialog(playerid);
 	return true;
 }
 
@@ -735,31 +742,31 @@ public: OnPlayerLoginGame(mysql_player, extraid, connectionHandle)
 	{
 		static email[32];
 		cache_get_field_content(0, "Email", email, g_CH, sizeof(email));
-		SetPVarInt(playerid, "MySQL_ID", cache_get_field_int(0, "ID", g_CH));
-		SetPVarInt(playerid, "Kills", cache_get_field_int(0, "Kills", g_CH));
-		SetPVarInt(playerid, "Deaths", cache_get_field_int(0, "Deaths", g_CH));
-		SetPVarInt(playerid, "Sex", cache_get_field_int(0, "Sex", g_CH));
-		SetPVarInt(playerid, "SetSpawn", cache_get_field_int(0, "SetSpawn", g_CH));
-		SetPVarInt(playerid, "HouseKey", cache_get_field_int(0, "HouseKey", g_CH));
-		SetPVarInt(playerid, "MoneyBank", cache_get_field_int(0, "MoneyBank", g_CH));
-		SetPVarInt(playerid, "Money", cache_get_field_int(0, "Money", g_CH));
-		SetPVarInt(playerid, "Level", cache_get_field_int(0, "Level", g_CH));
-		SetPVarInt(playerid, "Exp", cache_get_field_int(0, "Exp", g_CH));
-		SetPVarInt(playerid, "Phone", cache_get_field_int(0, "phone", g_CH));
-		SetPVarInt(playerid, "sdpistol", cache_get_field_int(0, "sdpistol", g_CH));
-		SetPVarInt(playerid, "deserteagle", cache_get_field_int(0, "deserteagle", g_CH));
-		SetPVarInt(playerid, "shotgun", cache_get_field_int(0, "shotgun", g_CH));
-		SetPVarInt(playerid, "mp5", cache_get_field_int(0, "mp5", g_CH));
-		SetPVarInt(playerid, "ak47", cache_get_field_int(0, "ak47", g_CH));
-		SetPVarInt(playerid, "m4", cache_get_field_int(0, "m4", g_CH));
+		SetGVarInt("MySQL_ID", cache_get_field_int(0, "ID", g_CH), playerid);
+		SetGVarInt("Kills", cache_get_field_int(0, "Kills", g_CH), playerid);
+		SetGVarInt("Deaths", cache_get_field_int(0, "Deaths", g_CH), playerid);
+		SetGVarInt("Sex", cache_get_field_int(0, "Sex", g_CH), playerid);
+		SetGVarInt("SetSpawn", cache_get_field_int(0, "SetSpawn", g_CH), playerid);
+		SetGVarInt("HouseKey", cache_get_field_int(0, "HouseKey", g_CH), playerid);
+		SetGVarInt("MoneyBank", cache_get_field_int(0, "MoneyBank", g_CH), playerid);
+		SetGVarInt("Money", cache_get_field_int(0, "Money", g_CH), playerid);
+		SetGVarInt("Level", cache_get_field_int(0, "Level", g_CH), playerid);
+		SetGVarInt("Exp", cache_get_field_int(0, "Exp", g_CH), playerid);
+		SetGVarInt("Phone", cache_get_field_int(0, "phone", g_CH), playerid);
+		SetGVarInt("sdpistol", cache_get_field_int(0, "sdpistol", g_CH), playerid);
+		SetGVarInt("deserteagle", cache_get_field_int(0, "deserteagle", g_CH), playerid);
+		SetGVarInt("shotgun", cache_get_field_int(0, "shotgun", g_CH), playerid);
+		SetGVarInt("mp5", cache_get_field_int(0, "mp5", g_CH), playerid);
+		SetGVarInt("ak47", cache_get_field_int(0, "ak47", g_CH), playerid);
+		SetGVarInt("m4", cache_get_field_int(0, "m4", g_CH), playerid);
 		oSetMoney(playerid, cache_get_field_int(0, "Money", g_CH));
 		oSetSkin(playerid, cache_get_field_int(0, "Skin", g_CH));
-		SetPVarInt(playerid, "IsLogged", 1), SendClientMessage(playerid, COLOR_WHITE, "Вы успешно вошли."),TogglePlayerSpectating(playerid, false);
+		SetGVarInt("IsLogged", 1, playerid), SendClientMessage(playerid, COLOR_WHITE, "Вы успешно вошли."),TogglePlayerSpectating(playerid, false);
 		if(strlen(email) == 0)
 		{
-		    static query_mysql[55];
-		    f(query_mysql, "DELETE FROM `"PTG"` WHERE `name`='%s'", PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, false, "","");
-	 		SendMes(playerid, COLOR_RED, "Критический сбой, перезайдите."), fix_kick(playerid);
+			static query_mysql[55];
+			f(query_mysql, "DELETE FROM `"PTG"` WHERE `name`='%s'", PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, false, "","");
+			SendMes(playerid, COLOR_RED, "Критический сбой, перезайдите."), fix_kick(playerid);
 		}
 		SetSpawnInfo(playerid, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
 		//SetSpawnInfo(playerid, 255, playerid, 0, 0, 0, 1.0, -1, -1, -1, -1, -1, -1);
@@ -768,9 +775,9 @@ public: OnPlayerLoginGame(mysql_player, extraid, connectionHandle)
 	else
 	{
 		SendClientMessage(playerid, COLOR_WHITE, "Неправильный пароль.");
-    	if(GetPVarInt(playerid, "PassWrong") == 2) SendClientMessage(playerid, COLOR_YELLOW, "Вы ввели неправильный пароль три раза подряд. {FF0000}Вы кикнуты !"), fix_kick(playerid);
-     	SetPVarInt(playerid, "PassWrong", GetPVarInt(playerid, "PassWrong") + 1);
-	 	new str[300];
+		if(GetGVarInt("PassWrong", playerid) == 2) SendClientMessage(playerid, COLOR_YELLOW, "Вы ввели неправильный пароль три раза подряд. {FF0000}Вы кикнуты !"), fix_kick(playerid);
+		SetGVarInt("PassWrong", GetGVarInt("PassWrong", playerid) + 1, playerid);
+		new str[300];
 		f(str, "{76EE00}Добро пожаловать на Сервер!\n{FF0000}Вы уже зарегистрированы ! Просто введите пароль и нажмите 'Войти'.\n\n{0000FF}Авторизация:{FFC125}\n- Тот же пароль что водили при регистрации\n\n\t\t{FF0000}Неверный пароль{0000FF} (осталось {FF0000}%i{0000FF} из 3)", 3 - GetPVarInt(playerid, "PassWrong"));
 		ShowPlayerDialog(playerid, Login, DIALOG_STYLE_INPUT, "Авторизация", str, "Войти", "Отмена");
 	}
@@ -779,27 +786,30 @@ public: OnPlayerLoginGame(mysql_player, extraid, connectionHandle)
 
 public: OnPlayerUpdateEx()
 {
-    GiveGVarInt("Tick", 1, 0);
+	GiveGVarInt("Tick", 1, 0);
 	foreach(new i : Player)
 	{
-		if(GetPVarInt(i, "IsLogged") == 0) return true;
-	    if(GetGVarInt("Tick") % 1800 == 0) Save_Player(i);
-	  //  if(GetPlayerSkin(i) == 0) SendMes(i, COLOR_YELLOW, "Произошел критический сбой, выберите скин."), SelectSkin(i);
- 	}
-    return true;
+		if(GetGVarInt("IsLogged", i) == 0)
+			return true;
+
+		if(GetGVarInt("Tick") % 1800 == 0)
+			Save_Player(i);
+		//  if(GetPlayerSkin(i) == 0) SendMes(i, COLOR_YELLOW, "Произошел критический сбой, выберите скин."), SelectSkin(i);
+	}
+	return true;
 }
 
 static bans_day[3];
 public: CheckBanList(mysql_player)
 {
 	static rows, fields;
-    cache_get_data(rows, fields);
+	cache_get_data(rows, fields);
 	if(rows)
 	{
-		SetPVarInt(playerid, "BanDate", cache_get_field_int(0, "UnBanDate", g_CH));
-		if(gettime() >= GetPVarInt(playerid, "BanDate") && GetPVarInt(playerid, "BanDate") >= 1) SetPVarInt(playerid, "UnBanPlayer", 1);
-		timestamp(GetPVarInt(playerid, "BanDate"), bans_day[0], bans_day[1], bans_day[2]), SetPVarInt(playerid, "Block", 1);
-		SetPVarInt(playerid, "Bloack_Msg_Year", bans_day[0]); SetPVarInt(playerid, "Bloack_Msg_Month", bans_day[1]); SetPVarInt(playerid, "Bloack_Msg_Day", bans_day[2]);
+		SetGVarInt("BanDate", cache_get_field_int(0, "UnBanDate", g_CH), playerid);
+		if(gettime() >= GetGVarInt("BanDate", playerid) && GetGVarInt("BanDate", playerid) >= 1) SetGVarInt("UnBanPlayer", 1, playerid);
+		timestamp(GetGVarInt("BanDate", playerid), bans_day[0], bans_day[1], bans_day[2]), SetGVarInt("Block", 1, playerid);
+		SetGVarInt("Bloack_Msg_Year", bans_day[0], playerid); SetGVarInt("Bloack_Msg_Month", bans_day[1], playerid); SetGVarInt("Bloack_Msg_Day", bans_day[2], playerid);
 	}
 	return true;
 }

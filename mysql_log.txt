@@ -700,3 +700,31 @@
 [21:23:05] OnLoadInteriors() - Callback is being called...
 [21:23:05] >> cache_get_data(Connection handle: 1)
 [21:23:05] ProcessTick() - The cache has been cleared.
+[19:03:00] Plugin succesfully loaded!
+[19:03:00] >> mysql_connect(localhost, root, test, ***) on port 3306
+[19:03:00] CMySQLHandler::CMySQLHandler() - constructor called.
+[19:03:00] CMySQLHandler::CMySQLHandler() - Connecting to "localhost" | DB: "test" | Username: "root"...
+[19:03:01] CMySQLHandler::Connect() - Can't connect to MySQL server on 'localhost' (10061) (error ID: 2003).
+[19:03:01] >> mysql_set_charset(Connection handle: 1)
+[19:03:01] CMySQLHandler::SetCharset() - You cannot call this function now (connection is dead).
+[19:03:01] >> mysql_query_callback(Connection handle: 1)
+[19:03:01] >> mysql_query_callback(Connection handle: 1)
+[19:03:01] >> mysql_ping(Connection handle: 1)
+[19:03:01] CMySQLHandler::Ping() - You cannot call this function now (connection is dead).
+[19:03:01] >> mysql_query_callback(Connection handle: 1)
+[19:03:01] >> mysql_query_callback(Connection handle: 1)
+[19:03:01] >> mysql_query_callback(Connection handle: 1)
+[19:03:40] Plugin succesfully loaded!
+[19:03:40] >> mysql_connect(localhost, root, test, ***) on port 3306
+[19:03:40] CMySQLHandler::CMySQLHandler() - constructor called.
+[19:03:40] CMySQLHandler::CMySQLHandler() - Connecting to "localhost" | DB: "test" | Username: "root"...
+[19:03:41] CMySQLHandler::Connect() - Can't connect to MySQL server on 'localhost' (10061) (error ID: 2003).
+[19:03:41] >> mysql_set_charset(Connection handle: 1)
+[19:03:41] CMySQLHandler::SetCharset() - You cannot call this function now (connection is dead).
+[19:03:41] >> mysql_query_callback(Connection handle: 1)
+[19:03:41] >> mysql_query_callback(Connection handle: 1)
+[19:03:41] >> mysql_ping(Connection handle: 1)
+[19:03:41] CMySQLHandler::Ping() - You cannot call this function now (connection is dead).
+[19:03:41] >> mysql_query_callback(Connection handle: 1)
+[19:03:41] >> mysql_query_callback(Connection handle: 1)
+[19:03:41] >> mysql_query_callback(Connection handle: 1)
