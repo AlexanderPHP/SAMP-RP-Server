@@ -8829,3 +8829,123 @@ v0.3x, (C)2005-2013 SA-MP Team
 [19:03:41] 
 Подключено к базе данных: Неуспешно
 [19:03:41] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3x, (C)2005-2013 SA-MP Team
+
+[11:31:19] filterscripts = ""  (string)
+[11:31:19] 
+[11:31:19] Server Plugins
+[11:31:19] --------------
+[11:31:19]  Loading plugin: sscanf
+[11:31:19] 
+
+[11:31:19]  ===============================
+
+[11:31:19]       sscanf plugin loaded.     
+
+[11:31:19]    (c) 2009 Alex "Y_Less" Cole
+
+[11:31:19]    0.3d-R2 500 Players "dnee"
+
+[11:31:19]  ===============================
+
+[11:31:19]   Loaded.
+[11:31:19]  Loading plugin: mysql
+[11:31:19] plugin.mysql: R15 successfully loaded.
+[11:31:19]   Loaded.
+[11:31:19]  Loading plugin: gvar
+[11:31:19] 
+
+*** GVar Plugin v1.3 by Incognito loaded ***
+
+[11:31:19]   Loaded.
+[11:31:19]  Loading plugin: streamer
+[11:31:19] 
+
+*** Streamer Plugin v2.6.1 by Incognito loaded ***
+
+[11:31:19]   Loaded.
+[11:31:19]  Loaded 4 plugins.
+
+[11:31:19] 
+[11:31:19] Filterscripts
+[11:31:19] ---------------
+[11:31:19]   Loaded 0 filterscripts.
+
+[11:31:19]  
+[11:31:19]  
+[11:31:20] 
+Подключено к базе данных: Неуспешно
+[11:31:20] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3x, (C)2005-2013 SA-MP Team
+
+[11:31:54] filterscripts = ""  (string)
+[11:31:54] 
+[11:31:54] Server Plugins
+[11:31:54] --------------
+[11:31:54]  Loading plugin: sscanf
+[11:31:54] 
+
+[11:31:54]  ===============================
+
+[11:31:54]       sscanf plugin loaded.     
+
+[11:31:54]    (c) 2009 Alex "Y_Less" Cole
+
+[11:31:54]    0.3d-R2 500 Players "dnee"
+
+[11:31:54]  ===============================
+
+[11:31:54]   Loaded.
+[11:31:54]  Loading plugin: mysql
+[11:31:54] plugin.mysql: R15 successfully loaded.
+[11:31:54]   Loaded.
+[11:31:54]  Loading plugin: gvar
+[11:31:54] 
+
+*** GVar Plugin v1.3 by Incognito loaded ***
+
+[11:31:54]   Loaded.
+[11:31:54]  Loading plugin: streamer
+[11:31:54] 
+
+*** Streamer Plugin v2.6.1 by Incognito loaded ***
+
+[11:31:54]   Loaded.
+[11:31:54]  Loaded 4 plugins.
+
+[11:31:54] 
+[11:31:54] Filterscripts
+[11:31:54] ---------------
+[11:31:54]   Loaded 0 filterscripts.
+
+[11:31:54]  
+[11:31:54]  
+[11:31:54] 
+Подключено к базе данных: Успешно
+[11:31:54] Number of vehicle models: 0
+[11:32:57] Incoming connection: 127.0.0.1:56198
+[11:32:57] [join] Alex_Frost has joined the server (0:127.0.0.1)
+[11:36:49] Incoming connection: 127.0.0.1:62789
+[11:36:49] [join] Sam_Samuel has joined the server (1:127.0.0.1)
+[11:37:55] [part] Sam_Samuel has left the server (1:1)
+[11:38:27] Incoming connection: 127.0.0.1:62815
+[11:38:27] [join] Sam_Samuel has joined the server (1:127.0.0.1)
+[11:38:35] [part] Sam_Samuel has left the server (1:2)
+[11:39:14] Incoming connection: 127.0.0.1:61924
+[11:39:14] [join] Sam_Samuel has joined the server (1:127.0.0.1)
+[11:39:52] [part] Sam_Samuel has left the server (1:1)
+[15:16:21] [part] Alex_Frost has left the server (0:1)

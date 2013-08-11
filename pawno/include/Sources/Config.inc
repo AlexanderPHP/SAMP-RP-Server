@@ -39,9 +39,9 @@
 #define Ammo_M4A1 89 //Кол - во, которые надо выстрелить, чтоы прокачать 1 процент  
 //Другое
 #define for_c(%0,%1,%2)   									for(new %2 = %0; %2 != %1; --%2)
-#define SellHome(%0)    									f(%0,"{0000FF}Дом продается..{FFFFFF}\n\nАдрес: {7CFC00}%s-{FF0000}%d{FFFFFF}\nЦена: {7CFC00}$%d{FFFFFF}", HouseInfo[idx][hNameStreet], idx, HouseInfo[idx][hPrice])
+#define SellHome(%0)    									f(%0,"{0000FF}Дом продается..{FFFFFF}\n\n-{FF0000}%d{FFFFFF}\nЦена: {7CFC00}$%d{FFFFFF}", idx, HouseInfo[idx][hPrice])
 #define MAX_INTER                                      						 	36
-#define MAX_HOUSE 									50 // Максимальное кол-во домов.
+#define MAX_HOUSE 										50 // Максимальное кол-во домов.
 #define MAX_PLAYERS                     								(50) // !> Максимальное кол-во игроков.
 #assert MAX_PLAYERS                								>(0)
 #define BYTES_PER_CELL 	 								(cellbits / 8)
@@ -49,26 +49,26 @@
 #define GivePVarInt(%1,%2,%3) 								SetPVarInt(%1,%2,GetPVarInt(%1,%2) + %3)
 #define GiveGVarInt(%0,%1,%2) 								SetGVarInt(%0,(GetGVarInt(%0, %2) + %1),%2)
 #define f(%1, 		 									format(%1,sizeof(%1),
-#define MSG_MyID(%0)                                        SendMes(%0, 0xF97804FF, "Вы указали свой ID")
-#define MSG_NoneOnlinePlayer(%0)                            SendMes(%0, COLOR_GREY, "Такого игрока нет или он еще не вошел !")
-#define oSetMoney(%1,%2) 									SetPVarInt(%1, "Money", %2), ResetPlayerMoney(%1); GivePlayerMoney(%1, %2)
-#define oGiveMoney(%1,%2)                                   GivePVarInt(%1, "Money", %2); GivePlayerMoney(%1, %2)
-#define oSetSkin(%1,%2)                                     SetPVarInt(%1, "Skin", %2), GetPlayerSkin(%1); SetPlayerSkin(%1, %2)
+#define MSG_MyID(%0)                                        						SendMes(%0, 0xF97804FF, "Вы указали свой ID")
+#define MSG_NoneOnlinePlayer(%0)                           						SendMes(%0, COLOR_GREY, "Такого игрока нет или он еще не вошел !")
+#define oSetMoney(%1,%2) 									SetGVarInt("Money", %2, %1), ResetPlayerMoney(%1); GivePlayerMoney(%1, %2)
+#define oGiveMoney(%1,%2)                                   						GiveGVarInt("Money", %2, %1); GivePlayerMoney(%1, %2)
+#define oSetSkin(%1,%2)                                     						SetGVarInt("Skin", %2, %1), GetPlayerSkin(%1); SetPlayerSkin(%1, %2)
 #define FreezePlayer(%0) 									TogglePlayerControllable(%0, false)
 #define UnFreezePlayer(%0)									TogglePlayerControllable(%0, true)
 #define VEHICLE_PARAMS_OFF  								0
 #define VEHICLE_PARAMS_ON   								1
 // MySQL
-#define MySQL_DEBUG             							1
-#define MySQL_HOST              							"localhost" // Ip где расположена phpMyAdmin
-#define MySQL_USER              							"root" // Login
-#define MySQL_DATABASE  							"test" // Название таблицы
-#define MySQL_PASS              							"" // Пароль
-#define mysql_player                                     	playerid, query[]
+#define MySQL_DEBUG             						1
+#define MySQL_HOST              							"localhost" // Host
+#define MySQL_USER              							"root" // User
+#define MySQL_DATABASE  							"test" // DB Name
+#define MySQL_PASS              							"" // Password
+#define mysql_player playerid, query[]
 // ====== Цвета ======
-#define COLOR_GREEN      									0x00FF00AA
-#define COLOR_RED 	 								0xFF0000AA
-#define COLOR_AQUA	 								0x7FC0E3FF
+#define COLOR_GREEN 0x00FF00AA
+#define COLOR_RED 0xFF0000AA
+#define COLOR_AQUA	 0x7FC0E3FF
 #define COLOR_BOX 0x00000050
 #define COLOR_BBLUE 0x20A9FFFF
 #define COLOR_ISPOLZUY 0x7FB151FF
@@ -176,7 +176,7 @@ enum fInfoSpawn
 
 enum hInfo
 {
-    hID,
+    	hID,
 	Float:hEnterX,
 	Float:hEnterY,
 	Float:hEnterZ,
@@ -189,16 +189,15 @@ enum hInfo
 	hInt,
 	hLock,
 	hOwned,
-    hPickup,
-    hIcon,
+   	hPickup,
+   	hIcon,
 	hVirtualWorld,
-	hNameStreet[20],
 };
 
 enum hInter
 {
-    vID,
-    vName[24],
+    	vID,
+    	vName[24],
 	Float:vX,
 	Float:vY,
 	Float:vZ,

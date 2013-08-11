@@ -599,7 +599,7 @@ public: OnLoadHouse(mysql_player)
 			HouseInfo[he][hInt] = cache_get_field_int(he, "Int", g_CH);
 			HouseInfo[he][hOwned] = cache_get_field_int(he, "Owned", g_CH);
 			cache_get_field_content(he, "Owner", HouseInfo[he][hOwner], g_CH, 24);
-			cache_get_field_content(he, "NameStreet", HouseInfo[he][hNameStreet], g_CH, 20);
+			//cache_get_field_content(he, "NameStreet", HouseInfo[he][hNameStreet], g_CH, 20);
 			HouseInfo[he][hPrice] = cache_get_field_int(he, "Price", g_CH);
 			HouseInfo[he][hLock] = cache_get_field_int(he, "Lock", g_CH);
 			HouseInfo[he][hVirtualWorld] = cache_get_field_int(he, "VirtualWorld", g_CH);
@@ -817,13 +817,13 @@ public: CheckBanList(mysql_player)
 public: CheckBanListIp(mysql_player)
 {
 	static rows, fields;
-    cache_get_data(rows, fields);
+	cache_get_data(rows, fields);
 	if(rows)
 	{
-		SetPVarInt(playerid, "BanDate", cache_get_field_int(0, "UnBanDate", g_CH));
-		if(gettime() >= GetPVarInt(playerid, "BanDate") && GetPVarInt(playerid, "BanDate") >= 1) SetPVarInt(playerid, "UnBanPlayer", 1);
-		if(GetPVarInt(playerid, "BanDate") >= 1) timestamp(GetPVarInt(playerid, "BanDate"), bans_day[0], bans_day[1], bans_day[2]);
-		SetPVarInt(playerid, "Bloack_Msg_Year", bans_day[0]); SetPVarInt(playerid, "Bloack_Msg_Month", bans_day[1]); SetPVarInt(playerid, "Bloack_Msg_Day", bans_day[2]);
+		SetGVarInt("BanDate", cache_get_field_int(0, "UnBanDate", g_CH), playerid);
+		if(gettime() >= GetGVarInt("BanDate", playerid) && GetGVarInt("BanDate", playerid) >= 1) SetGVarInt("UnBanPlayer", 1, playerid);
+		if(GetGVarInt("BanDate", playerid) >= 1) timestamp(GetGVarInt("BanDate", playerid), bans_day[0], bans_day[1], bans_day[2]);
+		SetGVarInt("Bloack_Msg_Year", bans_day[0], playerid); SetGVarInt("Bloack_Msg_Month", bans_day[1], playerid); SetGVarInt("Bloack_Msg_Day", bans_day[2], playerid);
 	}
 	return true;
 }
@@ -831,56 +831,57 @@ public: CheckBanListIp(mysql_player)
 public: UnBan(mysql_player)
 {
 	static rows, fields;
-    cache_get_data(rows, fields);
-    if(rows)
+	cache_get_data(rows, fields);
+	if(rows)
 	{
-	    static str[24], query_mysql[80];
-	    cache_get_field_content(0, "Nick", str, g_CH, sizeof(str));
+		static str[24], query_mysql[80];
+		cache_get_field_content(0, "Nick", str, g_CH, sizeof(str));
 		SendMes(playerid, COLOR_YELLOW, "Вы успешно разбанили акаунт : {FF0000}%s", str);
 		f(query_mysql, "DELETE FROM `"BanList"` WHERE `Nick` = '%s'", str), mysql_function_query(g_CH, query_mysql, false, "","");
 	}
-	else SendMes(playerid, COLOR_RED,"Игрок не забанен !");
+	else
+		SendMes(playerid, COLOR_RED,"Игрок не забанен !");
 	mysql_free_result();
 	return true;
 }
 
 public: Info(mysql_player)
 {
- 	static rows, fields;
-    cache_get_data(rows, fields);
-    if(rows)
+	static rows, fields;
+	cache_get_data(rows, fields);
+	if(rows)
 	{
-	    new str[100], temp[120];
-	    static ip[16], data[16], name[24], admin[24], email[32];
-	    if(GetPVarInt(playerid, "IBan") == 1)
-	    {
-		    cache_get_field_content(0, "Nick", name, g_CH, sizeof(name));
-		    cache_get_field_content(0, "IP", ip, g_CH, sizeof(ip));
-		    cache_get_field_content(0, "Admin", admin, g_CH, sizeof(admin));
-		    cache_get_field_content(0, "Date", data, g_CH, sizeof(data));
-		    cache_get_field_content(0, "Reason", email, g_CH, sizeof(email));
-	     	SetPVarInt(playerid, "DaysBan", cache_get_field_int(0, "Days", g_CH));
-			f(str, "Ник: {FF0000}%s", name), f(temp, "{FFFFFF}Забанил: %s\nЗабанен на: %d дней\nБыл забанен: %s\nIP: %s\nПричина: %s", admin, GetPVarInt(playerid, "DaysBan"), data, ip, email);
-			ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX, str, temp, "Ok", ""), DeletePVar(playerid, "IBan");
-            return true;
+		new str[100], temp[120];
+		static ip[16], data[16], name[24], admin[24], email[32];
+		if(GetGVarInt("IBan", playerid) == 1)
+		{
+			cache_get_field_content(0, "Nick", name, g_CH, sizeof(name));
+			cache_get_field_content(0, "IP", ip, g_CH, sizeof(ip));
+			cache_get_field_content(0, "Admin", admin, g_CH, sizeof(admin));
+			cache_get_field_content(0, "Date", data, g_CH, sizeof(data));
+			cache_get_field_content(0, "Reason", email, g_CH, sizeof(email));
+			SetGVarInt("DaysBan", cache_get_field_int(0, "Days", g_CH), playerid);
+			f(str, "Ник: {FF0000}%s", name), f(temp, "{FFFFFF}Забанил: %s\nЗабанен на: %d дней\nБыл забанен: %s\nIP: %s\nПричина: %s", admin, GetGVarInt("DaysBan", playerid), data, ip, email);
+			ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX, str, temp, "Ok", ""), DeleteGVar("IBan", playerid);
+			return true;
 		}
-  		if(GetPVarInt(playerid, "IGet") == 1)
-	    {
-		    cache_get_field_content(0, "Name", name, g_CH, sizeof(name));
-		    cache_get_field_content(0, "IP", ip, g_CH, sizeof(ip));
-		    cache_get_field_content(0, "Email", email, g_CH, sizeof(email));
+		if(GetGVarInt("IGet", playerid) == 1)
+		{
+			cache_get_field_content(0, "Name", name, g_CH, sizeof(name));
+			cache_get_field_content(0, "IP", ip, g_CH, sizeof(ip));
+			cache_get_field_content(0, "Email", email, g_CH, sizeof(email));
 			f(str, "{FFFFFF}Ник: {FF0000}%s{FFFFFF} | ID: {FF0000}%d", name, cache_get_field_int(0, "ID", g_CH)), f(temp, "{FFFFFF}Денег: %d\nIP: %s\nEmail: %s\nSkin: %d\nПол: %s", cache_get_field_int(0, "Money", g_CH), ip, email, cache_get_field_int(0, "Skin", g_CH), (cache_get_field_int(0, "Sex", g_CH))  ? ("Женский") : ("Мужской"));
-			ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX, str, temp, "Ok", ""), DeletePVar(playerid, "IGet");
-            return true;
+			ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX, str, temp, "Ok", ""), DeleteGVar("IGet", playerid);
+			return true;
 		}
-		if(GetPVarInt(playerid, "IAdm") == 1)
-	    {
-		    cache_get_field_content(0, "Name", name, g_CH, sizeof(name));
-		    cache_get_field_content(0, "IP", ip, g_CH, sizeof(ip));
-		    cache_get_field_content(0, "Admin", email, g_CH, sizeof(email));
-		    cache_get_field_content(0, "Date", data, g_CH, sizeof(data));
+		if(GetGVarInt("IAdm", playerid) == 1)
+		{
+			cache_get_field_content(0, "Name", name, g_CH, sizeof(name));
+			cache_get_field_content(0, "IP", ip, g_CH, sizeof(ip));
+			cache_get_field_content(0, "Admin", email, g_CH, sizeof(email));
+			cache_get_field_content(0, "Date", data, g_CH, sizeof(data));
 			f(str, "{FFFFFF}Ник: {FF0000}%s{FFFFFF}", name), f(temp, "{FFFFFF}Назначил: %s\nIP: %s\nДата назначения: %s\nAdm-lvl: %d", email, ip, data, cache_get_field_int(0, "AdmLevel", g_CH));
-			ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX, str, temp, "Ok", ""), DeletePVar(playerid, "IAdm");
+			ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX, str, temp, "Ok", ""), DeleteGVar("IAdm", playerid);
 			return true;
 		}
 	}
@@ -891,15 +892,15 @@ public: Info(mysql_player)
 // Стоки
 stock PlayerSpawn(playerid)
 {
-	if(GetPVarInt(playerid, "IsLogged") == 0) return SendMes(playerid, COLOR_RED, "Вы не авторизованы !");
-    new idx = GetPVarInt(playerid, "HouseKey");
-    switch(GetPVarInt(playerid, "SetSpawn"))
-    {
+	if(GetGVarInt("IsLogged", playerid) == 0) return SendMes(playerid, COLOR_RED, "Вы не авторизованы !");
+	new idx = GetGVarInt("HouseKey", playerid);
+	switch(GetGVarInt("SetSpawn", playerid))
+	{
 		case 0: SetPlayerPos(playerid,1151.5771,-1772.2440,16.5992);
 		case 1: SetPlayerPos(playerid, HouseInfo[idx][hExitX], HouseInfo[idx][hExitY], HouseInfo[idx][hExitZ]), SetPlayerInterior(playerid,HouseInfo[idx][hInt]), SetPlayerVirtualWorld(playerid,HouseInfo[idx][hVirtualWorld]);
 	}
 	//SetPlayerPos(playerid, SpawnInfo[0][fSpawnX], SpawnInfo[0][fSpawnY], SpawnInfo[0][fSpawnZ]), SetPlayerInterior(playerid, SpawnInfo[0][fInt]), SetPlayerColor(playerid, SpawnInfo[0][fColor]);
-	SetPlayerSkin(playerid, GetPVarInt(playerid, "Skin"));
+	SetPlayerSkin(playerid, GetGVarInt("Skin", playerid));
 	DollahScoreUpdate(playerid);
 	return true;
 }
@@ -909,7 +910,7 @@ stock DollahScoreUpdate(playerid)
 	new LevScore;
 	foreach (new i : Player)
 	{
-		LevScore = GetPVarInt(playerid, "Level");
+		LevScore = GetGVarInt("Level", playerid);
 		SetPlayerScore(i, LevScore);
 	}
 	return true;
@@ -921,19 +922,19 @@ stock SaveHouse()
 		query_mysql[200],
 		query_mysql_two[400];
 	for_c(GetGVarInt("HouseM")-1, -1, i)
-    {
-	    f(query_mysql, "UPDATE `"PTGH"` SET `EnterX`=%f,`EnterY`=%f,`EnterZ`=%f, `ExitX`=%f,`ExitY`=%f", HouseInfo[i][hEnterX], HouseInfo[i][hEnterY], HouseInfo[i][hEnterZ], HouseInfo[i][hExitX], HouseInfo[i][hExitY]);
-	    f(query_mysql_two, "%s,`ExitZ`=%f,`Int`=%d,`Owned`=%d,`Owner`='%s',`Price`=%d,`Lock`=%d WHERE ID = %d", query_mysql, HouseInfo[i][hExitZ], HouseInfo[i][hInt], HouseInfo[i][hOwned], HouseInfo[i][hOwner], HouseInfo[i][hPrice], HouseInfo[i][hLock], HouseInfo[i][hID]);
-	    mysql_function_query(g_CH, query_mysql_two, false, "", "");
-    }
-    return true;
+	{
+		f(query_mysql, "UPDATE `"PTGH"` SET `EnterX`=%f,`EnterY`=%f,`EnterZ`=%f, `ExitX`=%f,`ExitY`=%f", HouseInfo[i][hEnterX], HouseInfo[i][hEnterY], HouseInfo[i][hEnterZ], HouseInfo[i][hExitX], HouseInfo[i][hExitY]);
+		f(query_mysql_two, "%s,`ExitZ`=%f,`Int`=%d,`Owned`=%d,`Owner`='%s',`Price`=%d,`Lock`=%d WHERE ID = %d", query_mysql, HouseInfo[i][hExitZ], HouseInfo[i][hInt], HouseInfo[i][hOwned], HouseInfo[i][hOwner], HouseInfo[i][hPrice], HouseInfo[i][hLock], HouseInfo[i][hID]);
+		mysql_function_query(g_CH, query_mysql_two, false, "", "");
+	}
+	return true;
 }
 
 stock LoadMySQL()
 {
 	mysql_set_charset("cp1251_general_ci", g_CH);
  	mysql_function_query(g_CH, "SET NAMES 'cp1251'", false, "", "");
-    mysql_function_query(g_CH, "SET CHARACTER SET 'cp1251'", false, "", "");
+	mysql_function_query(g_CH, "SET CHARACTER SET 'cp1251'", false, "", "");
 	printf("\nПодключено к базе данных: %s", (mysql_ping(g_CH)==1 ? ("Успешно"):("Неуспешно")));
 	mysql_function_query(g_CH, "SELECT * FROM `"SPA"`", true, "OnLoadSpawn","");
 	mysql_function_query(g_CH, "SELECT * FROM `"PTGH"`", true, "OnLoadHouse","");
@@ -946,39 +947,42 @@ stock GoInfo(playerid)
 	static query_mysql[80];
 	f(query_mysql, "SELECT * FROM `AdminsInfo` WHERE Name = '%s'", PlayerName(playerid));
 	mysql_function_query(g_CH, query_mysql, true, "OnQueryAdminsInfo", "d", playerid);
-	if(GetPVarInt(playerid, "HouseKey") >= 0) f(query_mysql, "SELECT * FROM `"PTGH"` WHERE `Owner` = '%s' AND `ID` = '%d'", PlayerName(playerid), GetPVarInt(playerid, "HouseKey")+1), mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckHouse", "d", playerid);
+	if(GetGVarInt("HouseKey", playerid) >= 0) f(query_mysql, "SELECT * FROM `"PTGH"` WHERE `Owner` = '%s' AND `ID` = '%d'", PlayerName(playerid), GetGVarInt("HouseKey", playerid)+1), mysql_function_query(g_CH, query_mysql, true, "OnPlayerCheckHouse", "d", playerid);
 	return true;
 }
 
 stock SelectSkin(playerid)
 {
-	SetPlayerPos(playerid, 259.2724,-41.4995,1002.0234), SetPlayerVirtualWorld(playerid, playerid);
-	SetPlayerSkin(playerid, (GetPVarInt(playerid, "Sex")) ? (SpawnInfo[0][fSkinGirl][0]) : (SpawnInfo[0][fSkin][0]));
+	SetPlayerPos(playerid, 259.2724,-41.4995,1002.0234);
+	SetPlayerVirtualWorld(playerid, playerid);
+	SetPlayerSkin(playerid, (GetGVarInt("Sex", playerid)) ? (SpawnInfo[0][fSkinGirl][0]) : (SpawnInfo[0][fSkin][0]));
 	SetPlayerInterior(playerid, 14), SetPlayerFacingAngle(playerid, 92.6158);
-	SetPlayerCameraPos(playerid,257.4099,-41.5846,1002.0234), SetPlayerCameraLookAt(playerid,257.4099,-41.5846,1002.0234);
- 	ShowMenuForPlayer(regskin, playerid), FreezePlayer(playerid);
+	SetPlayerCameraPos(playerid,257.4099,-41.5846,1002.0234);
+	SetPlayerCameraLookAt(playerid,257.4099,-41.5846,1002.0234);
+ 	ShowMenuForPlayer(regskin, playerid);
+ 	FreezePlayer(playerid);
 }
 
 stock Block(playerid)
 {
-    if(GetPVarInt(playerid, "UnBanPlayer") == 1)
-    {
-        static query_mysql[80];
-    	f(query_mysql, "DELETE FROM `"BanList"` WHERE `Nick` = '%s'", PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, false, "","");
-		SendMes(playerid, COLOR_YELLOW, "Срок бана вышел, вы разбанены !"), DeletePVar(playerid, "BlockIp"), DeletePVar(playerid, "Block");
-		return fix_kick(playerid);
-    }
-    static str[120];
-	if(GetPVarInt(playerid, "BlockIp") == 1)
+	if(GetGVarInt("UnBanPlayer", playerid) == 1)
 	{
-        if(GetPVarInt(playerid, "BanDate") >= 1) f(str, "{FFFFFF}Ваш Ip заблокирован до: {FF0000}%d{FFFFFF} / {FF0000}%d{FFFFFF} / {FF0000}%d", GetPVarInt(playerid, "Bloack_Msg_Day"), GetPVarInt(playerid, "Bloack_Msg_Month"), GetPVarInt(playerid, "Bloack_Msg_Year")), ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Ip заблокирован.", str, "Выход","");
-        else ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Ip заблокирован.", "{FFFFFF}Ваш Ip заблокирован навсегда !", "Выход","");
+		static query_mysql[80];
+		f(query_mysql, "DELETE FROM `"BanList"` WHERE `Nick` = '%s'", PlayerName(playerid)), mysql_function_query(g_CH, query_mysql, false, "","");
+		SendMes(playerid, COLOR_YELLOW, "Срок бана вышел, вы разбанены !"), DeleteGVar("BlockIp", playerid), DeleteGVar("Block", playerid);
 		return fix_kick(playerid);
 	}
-	if(GetPVarInt(playerid, "Block") == 1)
+	static str[120];
+	if(GetGVarInt("BlockIp", playerid) == 1)
 	{
-		if(GetPVarInt(playerid, "BanDate") >= 1) f(str, "{FFFFFF}Ваш акаунт заблокирован до: {FF0000}%d{FFFFFF} / {FF0000}%d{FFFFFF} / {FF0000}%d", GetPVarInt(playerid, "Bloack_Msg_Day"), GetPVarInt(playerid, "Bloack_Msg_Month"), GetPVarInt(playerid, "Bloack_Msg_Year")), ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Акаунт заблокирован.", str, "Выход","");
-        else ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Акаунт заблокирован", "{FFFFFF}Ваш акаунт заблокирован навсегда !", "Выход","");
+		if(GetGVarInt("BanDate", playerid) >= 1) f(str, "{FFFFFF}Ваш Ip заблокирован до: {FF0000}%d{FFFFFF} / {FF0000}%d{FFFFFF} / {FF0000}%d", GetGVarInt("Bloack_Msg_Day", playerid), GetGVarInt("Bloack_Msg_Month", playerid), GetGVarInt("Bloack_Msg_Year", playerid)), ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Ip заблокирован.", str, "Выход","");
+		else ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Ip заблокирован.", "{FFFFFF}Ваш Ip заблокирован навсегда !", "Выход","");
+		return fix_kick(playerid);
+	}
+	if(GetGVarInt("Block", playerid) == 1)
+	{
+		if(GetGVarInt("BanDate", playerid) >= 1) f(str, "{FFFFFF}Ваш акаунт заблокирован до: {FF0000}%d{FFFFFF} / {FF0000}%d{FFFFFF} / {FF0000}%d", GetGVarInt("Bloack_Msg_Day", playerid), GetGVarInt("Bloack_Msg_Month", playerid), GetGVarInt("Bloack_Msg_Year", playerid)), ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Акаунт заблокирован.", str, "Выход","");
+		else ShowPlayerDialog(playerid, D_NONE, 0,"{00CD00}Акаунт заблокирован", "{FFFFFF}Ваш акаунт заблокирован навсегда !", "Выход","");
 		return fix_kick(playerid);
 	}
 	return false;
@@ -1015,44 +1019,43 @@ stock RegisterDialog(playerid) return ShowPlayerDialog(playerid, Register, DIALO
 
 stock SendMes(playerid, color, fstring[], {Float, _}:...)
 {
-    static const
-    STATIC_ARGS = 3;
-    new n = (numargs() - STATIC_ARGS) * BYTES_PER_CELL;
-    if (n)
-    {
-        new message[128], arg_start, arg_end;
-        #emit CONST.alt        fstring
-        #emit LCTRL          5
-        #emit ADD
-        #emit STOR.S.pri        arg_start
-        #emit LOAD.S.alt        n
-        #emit ADD
-        #emit STOR.S.pri        arg_end
-        do
-        {
-            #emit LOAD.I
-            #emit PUSH.pri
-            arg_end -= BYTES_PER_CELL;
-            #emit LOAD.S.pri      arg_end
-        }
-        while (arg_end > arg_start);
-        #emit PUSH.S          fstring
-        #emit PUSH.C          128
-        #emit PUSH.ADR         message
-        n += BYTES_PER_CELL * 3;
-        #emit PUSH.S          n
-        #emit SYSREQ.C         format
-        n += BYTES_PER_CELL;
-        #emit LCTRL          4
-        #emit LOAD.S.alt        n
-        #emit ADD
-        #emit SCTRL          4
-        return SendClientMessage(playerid, color, message);
-    }
-    else
-    {
-        return SendClientMessage(playerid, color, fstring);
-    }
+	static const STATIC_ARGS = 3;
+	new n = (numargs() - STATIC_ARGS) * BYTES_PER_CELL;
+	if (n)
+	{
+		new message[128], arg_start, arg_end;
+		#emit CONST.alt        fstring
+		#emit LCTRL          5
+		#emit ADD
+		#emit STOR.S.pri        arg_start
+		#emit LOAD.S.alt        n
+		#emit ADD
+		#emit STOR.S.pri        arg_end
+	do
+	{
+		#emit LOAD.I
+		#emit PUSH.pri
+		arg_end -= BYTES_PER_CELL;
+		#emit LOAD.S.pri      arg_end
+	}
+	while (arg_end > arg_start);
+		#emit PUSH.S          fstring
+		#emit PUSH.C          128
+		#emit PUSH.ADR         message
+		n += BYTES_PER_CELL * 3;
+		#emit PUSH.S          n
+		#emit SYSREQ.C         format
+		n += BYTES_PER_CELL;
+		#emit LCTRL          4
+		#emit LOAD.S.alt        n
+		#emit ADD
+		#emit SCTRL          4
+		return SendClientMessage(playerid, color, message);
+	}
+	else
+	{
+		return SendClientMessage(playerid, color, fstring);
+	}
 }
 
 stock WriteLog(const file[],string[])
@@ -1063,7 +1066,6 @@ stock WriteLog(const file[],string[])
  	format(write, sizeof(write), "[Logs]/%s",file);
  	new File:hFile = fopen(write, io_append);
  	format(write, sizeof(write), "[%d.%02d.%02d | %02d:%02d:%02d] %s\r\n",day,month,year,hour,minute,second,string);
-	//for_c(strlen(write), 0, i) fputchar(hFile, write[i], false);
  	fwrite(hFile,write);
  	fclose(hFile);
  	return true;
@@ -1071,55 +1073,41 @@ stock WriteLog(const file[],string[])
 
 stock timestamp (unix_timestamp = 0, & year = 1970, & month = 1, & day  = 1, & hour =  0, & minute = 0, & second = 0)
 {
-    year = unix_timestamp/31557600, unix_timestamp -= year*31557600, year += 1970;
-    if (year % 4 == 0) unix_timestamp -= 21600;
-    day = unix_timestamp/86400;
-    switch(day)
-    {
-        case  0..30: second = day, month = 1;
-        case  31..58: second = day - 31, month = 2;
-        case  59..89: second = day - 59, month = 3;
-        case 90..119: second = day - 90, month = 4;
-        case 120..150: second = day - 120, month = 5;
-        case 151..180: second = day - 151, month = 6;
-        case 181..211: second = day - 181, month = 7;
-        case 212..242: second = day - 212, month = 8;
-        case 243..272: second = day -243, month = 9;
-        case 273..303: second = day - 273, month = 10;
-        case 304..333: second = day - 304, month = 11;
-        case 334..366: second = day - 334, month = 12;
-    }
-    unix_timestamp -= day*86400, hour = unix_timestamp/3600;
-    unix_timestamp -= hour*3600, minute = unix_timestamp/60;
-    unix_timestamp -= minute*60, day = second + 1;
-    second = unix_timestamp;
+	year = unix_timestamp/31557600, unix_timestamp -= year*31557600, year += 1970;
+	if (year % 4 == 0) unix_timestamp -= 21600;
+	day = unix_timestamp/86400;
+	switch(day)
+	{
+		case  0..30: second = day, month = 1;
+		case  31..58: second = day - 31, month = 2;
+		case  59..89: second = day - 59, month = 3;
+		case 90..119: second = day - 90, month = 4;
+		case 120..150: second = day - 120, month = 5;
+		case 151..180: second = day - 151, month = 6;
+		case 181..211: second = day - 181, month = 7;
+		case 212..242: second = day - 212, month = 8;
+		case 243..272: second = day -243, month = 9;
+		case 273..303: second = day - 273, month = 10;
+		case 304..333: second = day - 304, month = 11;
+		case 334..366: second = day - 334, month = 12;
+	}
+	unix_timestamp -= day*86400, hour = unix_timestamp/3600;
+	unix_timestamp -= hour*3600, minute = unix_timestamp/60;
+	unix_timestamp -= minute*60, day = second + 1;
+	second = unix_timestamp;
 }
 
 stock Save_Player(playerid)
 {
-	if(GetPVarInt(playerid, "IsLogged") == 1)
+	if(GetGVarInt("IsLogged", playerid) == 1)
 	{
 	    static str[280];
 		f(str, "UPDATE `"PTG"` SET \
 			`Level` = %d, `Exp` = %d, `Money` = %d, `MoneyBank` = %d, `Kills` = %d, `Deaths` = %d, `Skin` = %d, `Sex` = %d, `HouseKey` = %d, `SetSpawn` = %d, `sdpistol` = %d, `deserteagle` = %d, `shotgun` = %d, `mp5` = %d, `ak47` = %d, `m4` = %d WHERE `ID` = %d",
-	 		GetPVarInt(playerid, "Level"), GetPVarInt(playerid, "Exp"), GetPVarInt(playerid, "Money"), GetPVarInt(playerid, "MoneyBank"), GetPVarInt(playerid, "Kills"), GetPVarInt(playerid, "Deaths"), GetPVarInt(playerid, "Skin"), GetPVarInt(playerid, "Sex"), GetPVarInt(playerid, "HouseKey"), GetPVarInt(playerid, "SetSpawn"), 
-			GetPVarInt(playerid, "sdpistol"), GetPVarInt(playerid, "deserteagle"), GetPVarInt(playerid, "shotgun"), GetPVarInt(playerid, "mp5"), GetPVarInt(playerid, "ak47"), GetPVarInt(playerid, "m4"), GetPVarInt(playerid, "MySQL_ID")
+	 		GetGVarInt("Level", playerid), GetGVarInt("Exp", playerid), GetGVarInt("Money", playerid), GetGVarInt("MoneyBank", playerid), GetGVarInt("Kills", playerid), GetGVarInt("Deaths", playerid), GetGVarInt("Skin"), GetGVarInt("Sex", playerid), GetGVarInt("HouseKey", playerid), GetGVarInt("SetSpawn", playerid), 
+			GetGVarInt("sdpistol", playerid), GetGVarInt("deserteagle", playerid), GetGVarInt("shotgun", playerid), GetGVarInt("mp5",playerid), GetGVarInt("ak47", playerid), GetGVarInt("m4", playerid), GetGVarInt("MySQL_ID", playerid)
 		); mysql_query(str, -1, -1, g_CH);
 	}
-	return true;
-}
-
-stock Stats(playerid)
-{
-	static str[300];
-	f(str,"\
-		 {00FF00}Ваш номер акк \t{FF0000}[{0000FF} %d {FF0000}]{00FF00}\n \
- 		Убийств \t\t{FF0000}[{0000FF} %d {FF0000}]{00FF00}\n \
-		Смертей \t\t{FF0000}[{0000FF} %d {FF0000}]{00FF00}\n \
-		Денег \t\t{FF0000}[{0000FF} %d {FF0000}]{00FF00}\n \
-		Пол \t\t\t{FF0000}[{0000FF} %s {FF0000}]{00FF00}"
-		,GetPVarInt(playerid, "MySQL_ID"), GetPVarInt(playerid, "Kills"), GetPVarInt(playerid, "Deaths"), GetPVarInt(playerid, "Money"), (GetPVarInt(playerid, "Sex"))  ? ("Женский") : ("Мужской"));
-	ShowPlayerDialog(playerid, D_NONE, DIALOG_STYLE_MSGBOX,"Ваша статистика:",str,"Ok","");
 	return true;
 }
 
